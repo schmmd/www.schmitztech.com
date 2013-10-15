@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="{{ baseurl }}/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="site">
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="title">{{ page.title }}</h1>
+          {% include bio.html %}
+        </div>
+      </div>
+
+      <div class="container">
+        {{ content }}
+      </div>
+
+      <div class="container panel-footer">
+        <div class="contact">
+          <p>
+            Michael Schmitz<br />
+            michael at schmitztech dot com
+          </p>
+        </div>
+        <div class="contact">
+          <p>
+            <a href="https://github.com/schmmd">github.com/schmmd</a><br />
+            <a href="http://www.linkedin.com/in/schmmd">www.linkedin.com/in/schmmd</a><br />
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
