@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Boxed
+title: Schmitriz
 author: Michael Schmitz
 category: olddownloads
 ---
