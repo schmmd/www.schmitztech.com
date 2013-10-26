@@ -15,7 +15,7 @@ Outside of work, I enjoy hiking in the Cascades, kayaking through the San
 Juans, baking bread in my cob oven, cidermaking in the fall, and living
 the island life on Whidbey Island.
 
-### Subtopics
+### Pages
 
 *  [Photos](http://schmitztech.com/photo). See the pictures I have taken.
 *  Eating and drinking.
@@ -26,7 +26,7 @@ the island life on Whidbey Island.
  *  Quinua. Eat the wonder-sprout of the Inca.
 *  Interests.
  *  [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
- *  Linux. Learn about my Linux setup and customizations.
+ *  [Linux]({{ base.url }}/category/linux.html). Learn about my Linux setup and customizations.
 * Nostalgia. For those who miss the old website.
  *  [Download]({{ base.url }}/category/olddownloads.html). Try some of the old software I have developed.
  *  [Outdoors]({{ base.url }}/category/outdoors.html). Explore the outdoors (in my footsteps).
