@@ -25,7 +25,6 @@ the island life on Whidbey Island.
  *  [Sourdough](/food/sourdough.html). The staff of life.
  *  Quinua. Eat the wonder-sprout of the Inca.
 *  Interests.
- *  [Green]({{ base.url }}/category/green). Save the planet.
  *  [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
  *  Linux. Learn about my Linux setup and customizations.
 * Nostalgia. For those who miss the old website.
