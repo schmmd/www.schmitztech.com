@@ -92,7 +92,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: monospace, serif;
+  font-family: monospace, sans-serif;
   font-size: 1em;
 }
 
@@ -4917,6 +4917,9 @@ a.list-group-item.active > .badge,
 }
 
 .jumbotron {
+  background-image: url('/assets/img/jumbobg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
   padding: 30px;
   margin-bottom: 30px;
   font-size: 21px;
@@ -6114,7 +6117,7 @@ body.modal-open,
   height: 20px;
   margin-top: -10px;
   margin-left: -10px;
-  font-family: serif;
+  font-family: sans-serif;
 }
 
 .carousel-control .icon-prev:before {
