@@ -8,31 +8,6 @@ author: Michael Schmitz
 ### Contact
 michael@schmitztech.com
 
-### Projects
-
-### Education
-
-**Everett High School**  
-*2000 - 2004*  
-
-* High School Diploma
-* 4.0 GPA
-* President of the chess, logic, and math teams.
-* Four year cross country runner.
-
-***
-
-**University of Washington**  
-Seattle, WA  
-*2004-2008*  
-
-* B.S. with distinction in Computer Science, cum laude
-* B.S. in Mathematics, cum laude
-* Minor in Philosophy (logic emphasis)
-* [Bob Bandes Award](http://www.cs.washington.edu/education/bandes.html) (Honorable Mention): an award for excellence in teaching.
-
-***
-
 ### Employment
 
 **Teaching Assistant and Coordinator**  
@@ -87,6 +62,74 @@ Manage development tools for large-scale computing (Hadoop) and to facilitate
 sharing of resources within the university and collaborating outside the
 university. Train engineering principles and quality software practices to
 students and peers.
+
+***
+
+### Education
+
+**Everett High School**  
+*2000 - 2004*  
+
+* High School Diploma
+* 4.0 GPA
+* [Superintendent Scholar](http://community.seattletimes.nwsource.com/archive/?date=20040609&slug=community09n)
+* President of the chess and math teams.
+* Four year cross country runner.
+
+***
+
+**University of Washington**  
+Seattle, WA  
+*2004-2008*  
+
+* B.S. with distinction in Computer Science, cum laude
+* B.S. in Mathematics, cum laude
+* Minor in Philosophy (logic emphasis)
+* [Bob Bandes Award](http://www.cs.washington.edu/education/bandes.html) (Honorable Mention): an award for excellence in teaching.
+
+***
+
+### Projects
+
+**Open Information Extraction 4.0**  
+[http://github.com/knowitall/openie](http://github.com/knowitall/openie)  
+*2013*  
+The UW's latest information extractor constructs n-ary binary relations from SRL frames. 
+
+***
+
+**UW NLP Tools**  
+[http://github.com/knowitall/nlptools](http://github.com/knowitall/nlptools)  
+A collection of interfaces and wrappers for popular NLP tools on the JVM.
+
+***
+
+**Open Information Extraction 4.0**  
+[http://github.com/knowitall/openie](http://github.com/knowitall/openie)  
+*2013*  
+The UW's latest information extractor constructs n-ary binary relations from SRL frames.
+
+***
+
+**Open IE Demo**  
+[http://openie.cs.washington.edu](http://openie.cs.washington.edu)  
+*2012*  
+Played an integral part in the creation, design, and architecture of a demo
+to explore billions Open IE triples over terabytes of data. 
+
+***
+
+**Ollie - Open Language Learner Information Extractor**  
+[http://github.com/knowitall/ollie](http://github.com/knowitall/ollie)  
+*2011*  
+Ollie is a next-generation Open Information extractor--it reads sentences and outputs binary relations.
+
+***
+
+**OpenRegex**  
+[http://github.com/knowitall/openregex](http://github.com/knowitall/openregex)  
+*2010 - 2013*  
+OpenRegex allows clients to easily apply a regular expression language to arbitrary sequences. For example, the client can write regular expressions over chunked sentence tokens to create information extractors.
 
 ***
 
