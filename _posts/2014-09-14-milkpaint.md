@@ -33,5 +33,9 @@ applied a coat, waited 2 hours, and then applied another coat, but this time of
 oil](https://www.youtube.com/watch?v=D9dVR2rHNrs&app=desktop).  The second coat
 didn't go on easily.  The oil separated from the paint and the paint beaded up
 and pulled back in areas.  Basically the consistency of the paint was ruined--I
-wouldn't mix again unless I were trying to save time..  Fortunately, it looked
+wouldn't mix again unless I were trying to save time.
+
+![Oily Milk Paint]({{ baseurl }}/assets/img/tungmilkpaint.jpg)
+
+Fortunately, it looked
 great when dry.  We finished with a coat of Benmatte.
