@@ -7,7 +7,7 @@ category: home
 
 Our deck dutch door needed a new coat of paint, and we tried out milk paint.
 The door was a maroon red, which didn't match the house that well.  We bought a
-[brick red milk paint](http://www.realmilkpaint.com/products.html) that fit
+[terra cota paint](http://www.realmilkpaint.com/products.html) that fit
 perfectly.
 
 On our first try we painted directly over the latext paint.  We used [Ultra
