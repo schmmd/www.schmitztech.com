@@ -107,3 +107,25 @@ Mash: 6 gallons 165F for 1 hr, stirring every 20 minutes.
 Lauter: 4 gallons 175F for 15 minutes. Recirculated until clear.
 
 Next time: use only 3 gallons for the sparge.
+
+### 2014
+[Brewtoad](https://www.brewtoad.com/recipes/whidbey-island-pale-ale)
+
+Malt:
+
+* 7 lb 2 row
+* 5 lb 10 L Munich
+* 1 lb Victory
+* 0.5 lb Caramel (Crystal 60L)
+
+Hops:
+
+* Chinook	1.0 oz Chinook at	60 min
+* 1.0 oz Cascade at 20 min
+* 1.0 oz Cascade at	10 min
+* 1.0 oz Cascade at	5 min
+* 1.0 oz Cascade at	1 min
+
+Yeast:
+
+* American Ale II	Wyeast 1272
