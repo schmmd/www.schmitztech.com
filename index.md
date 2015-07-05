@@ -24,6 +24,7 @@ the island life on Whidbey Island.
  *  [Recipes]({{ base.url }}/category/recipes.html).
  *  [Sourdough](/food/sourdough.html). The staff of life.
  *  [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
+ *  [Cob Oven](/food/cob.html). Earth oven cooking.
 *  Interests.
  *  [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
  *  [Linux]({{ base.url }}/category/linux.html). Learn about my Linux setup and customizations.
