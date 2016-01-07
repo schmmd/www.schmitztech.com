@@ -17,7 +17,7 @@ the island life on Whidbey Island.
 
 ### Pages
 
-*  [Photos](http://server.schmitztech.com/photo). See the pictures I have taken.
+*  [Photos](http://static.schmitztech.com/photo). See the pictures I have taken.
 *  Eating and drinking.
  *  [Alcohol]({{ base.url }}/category/alcohol.html). In moderation, of course.
  *  [Jam](/food/jam.html).
