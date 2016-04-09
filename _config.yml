@@ -1,5 +1,5 @@
 name: Schmitztech
-markdown: kramdown
+markdown: redcarpet
 pygments: true
 permalink: none
 baseurl:  
