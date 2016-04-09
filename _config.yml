@@ -1,4 +1,5 @@
 name: Schmitztech
+markdown: kramdown
 pygments: true
 permalink: none
 baseurl:  
