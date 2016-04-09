@@ -18,6 +18,7 @@ the island life on Whidbey Island.
 ### Pages
 
 *  [Photos](http://static.schmitztech.com/photo). See the pictures I have taken.
+
 *  Eating and drinking.
   * [Alcohol]({{ base.url }}/category/alcohol.html). In moderation, of course.
   * [Jam](/food/jam.html).
@@ -25,9 +26,11 @@ the island life on Whidbey Island.
   * [Sourdough](/food/sourdough.html). The staff of life.
   * [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
   * [Cob Oven](/food/coboven.html). Earth oven cooking.
+
 *  Interests.
   * [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
   * [Linux]({{ base.url }}/category/linux.html). Learn about my Linux setup and customizations.
+
 * Nostalgia. For those who miss the old website.
   * [Download]({{ base.url }}/category/olddownloads.html). Try some of the old software I have developed.
   * [Outdoors]({{ base.url }}/category/outdoors.html). Explore the outdoors (in my footsteps).
