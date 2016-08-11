@@ -33,3 +33,17 @@ We tried a recipe with no added water.
 * 1 t yeat nutrient
 * 2 campden tablets
 * 1 package wine yeat
+
+# 2016 Plum Wine
+
+Our previous plum wine was delicious, but quite tart--particularly in the
+aftertaste.  Because of this, we added more sugar, which should increase
+the alcohol to the maximum (~ 14%) and the sweetness slightly.
+
+* 1 gallon crushed plums (pits too)
+* 2 lb sugar
+* 1/2 tsp acid blend
+* 1 1/2 tsp pctic enzyme
+* 1 tsp yeast nutrient
+* 2 camden tablets
+* 1 package yeast (Cote des Blancs)
