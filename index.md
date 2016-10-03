@@ -27,7 +27,8 @@ the island life on Whidbey Island.
   - [Cob Oven](/food/coboven.html). Earth oven cooking.
 *  Interests.
   - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
-  - [Linux]({{ base.url }}/category/linux.html). Learn about my Linux setup and customizations.
+  - [Linux]({{ base.url }}/category/linux.html). Follow my Linux setup and customizations.
+  - [Projects]({{ base.url }}/category/projects.html). Learn about projects I've built.
 * Nostalgia. For those who miss the old website.
   - [Download]({{ base.url }}/category/olddownloads.html). Try some of the old software I have developed.
   - [Outdoors]({{ base.url }}/category/outdoors.html). Explore the outdoors (in my footsteps).
