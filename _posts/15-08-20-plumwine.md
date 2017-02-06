@@ -47,3 +47,9 @@ the alcohol to the maximum (~ 14%) and the sweetness slightly.
 * 1 tsp yeast nutrient
 * 2 camden tablets
 * 1 package yeast (Cote des Blancs)
+
+Tasting notes: the plum wine still has a tart aftertase, but also a pleasant
+sweetness--much more akin to what you would expect from a plum wine but without
+restricting itself to a desert wine.  While we're not smitten, we have
+confidence it will age well.  Sara is a huge fan--it reminds her of her
+childhood.
