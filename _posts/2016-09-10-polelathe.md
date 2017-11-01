@@ -73,16 +73,24 @@ another crotch but with oak boards fastened across with brass rivets.
 
 ## Spring Pole
 
-My next experiment was to use a sprint pole instead of bike bungies.  My first
+My next experiment was to use a spring pole instead of bike bungies.  My first
 pole was too short (around 24 feet) so I upgraded to a pole that's over 30 feet
 long.  I first propped my pole up with an X I built with two cedar branches
-bound together, but I upgraded to a crotch I hammered into the ground.  I needed to balance where I put the crotch--if it were too near the bottom of the spring pole than there would be too much leverage and if I put it too near the top then I would not have enough hight to have full turns.
+bound together, but I upgraded to a crotch I hammered into the ground.  I
+needed to balance where I put the crotch--if it were too near the bottom of the
+spring pole than there would be too much leverage and if I put it too near the
+top then I would not have enough hight to have full turns.
 
 The spring pole doubled as an unparalleled cat toy.
 
 ## Double Spring Pole Lathe
 
-As winter came, I needed an indoor solution to my pole lathe because it's constantly raining and it's dark by 5.  At first I thought I should jump headfirst into building a treadle lathe, but instead I built a double spring pole lathe, roughtly following Roy Underhill's design in [The Woodwright's Shop: A Practical Guide to Traditional Woodcraft](https://www.amazon.com/Woodwrights-Shop-Practical-Traditional-Woodcraft/dp/0807840823/ref=la_B001JSBCO0_1_1?s=books&ie=UTF8&qid=1480727520&sr=1-1).
+As winter came, I needed an indoor solution to my pole lathe because it's
+constantly raining and it's dark by 5.  At first I thought I should jump
+headfirst into building a treadle lathe, but instead I built a double spring
+pole lathe, roughtly following Roy Underhill's design in [The Woodwright's
+Shop: A Practical Guide to Traditional
+Woodcraft](https://www.amazon.com/Woodwrights-Shop-Practical-Traditional-Woodcraft/dp/0807840823/ref=la_B001JSBCO0_1_1?s=books&ie=UTF8&qid=1480727520&sr=1-1).
 
 The double spring pole lathe conveniently places the spring pole underneath the
 lathe bed and uses a pivoted arm to magnify the spring pole distance.  You can
@@ -91,3 +99,34 @@ adjustability.  Unfortunately my shop has a low ceiling, which limits the
 height the pivot arm can swing to.  Whereas with my spring pole I can often get
 5 turns, with my double spring pole I only get around 3.  Regardless, it's been
 a handy machine for indoor turning!
+
+Ultimately however, the "double spring poles" broke when I turned larger
+objects and I went back to the pole lathe.
+
+## Class with Jarrod Dahl
+
+In late October 2017 I took a pole lathe turning class with Jarrod Dahl at
+the North Folk School in Minnesota.  I learned several great tips from the
+course:
+
+* Cannisters, or end-grain cups, are turned from radial (quartersawn) pieces.
+* End-grain cups can be turned with projections (such as handles) by hewing
+  out a bit of the handle and then banging the hook against the projection
+  as the rest is turned away.  Finally, the projection is carved.
+* To use a bungee inside, buy the largest bungee you can find and wrap it
+  back and forth 5-7 times at about 75% tension.
+* Jarrod's lathes are made from a single timber with a slot cut down the
+  middle.  The legs have square feet which allow small adjustments for leveling
+  by rotating.
+* A pin added to the end of the wedge keeps it from flying out.
+* Jarrod doesn't heat treat (i.e. quench) his hook tools when forging.  Rather
+  he normalizes them (heat to orange and then cool) a few times and then
+  lets them cool slowly.  His hooks last him 1-2 years and he uses 5/8 O-1
+  steel.  The wider diameter stock limits flex.
+* Jarrod uses the largest starter cord he can buy for drive cord.
+* A 1.25" tall tool rest allows you to grip the tool effectively.
+
+One of the main take-aways was how much you should cut in arcs when using
+a pole lathe.  Instead of pushing the hook tool in or out from the piece,
+you should pivot the tool along the tool rest to cut in a clean arc.  Slow
+arcs make clean cuts and avoid spiraling when turning the bowl.
