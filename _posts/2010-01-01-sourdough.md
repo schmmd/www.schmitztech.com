@@ -10,11 +10,11 @@ category: food
 Sourdough Care
 --------------
 
-Your sourdough is a living culture, so it must be cared for. For one, you should feed it by mixing in a heaping spoonful of flour and enough water to maintain the consistency. A healthy start needs to be fed only once every week or two so long as it is kept refrigerated. A room temperature starter, however, should be fed daily. Keeping your sourdough start out will result in a much more vibrant starter, but if you do not use it often feeding it may become burdensome. Thus you can keep it in the fridge, but allow it to regain full vitality by leaving it out for half a day before use.
+Your sourdough is a living culture, so it must be cared for. For one, you should feed it by mixing in a heaping spoonful of flour and enough water to maintain the consistency. A healthy starter needs to be fed only once every week or two so long as it is kept refrigerated. A room temperature starter, however, should be fed daily. Keeping your sourdough starter out will result in a much more vibrant starter, but if you do not use it often feeding it may become burdensome. Thus you can keep it in the fridge, but allow it to regain full vitality by leaving it out for half a day before use.
 
 Your culture will also appreciate it's jar being cleaned periodically. This does not have to be done often (or at all), but keeping the jar tidy will ward off molds that may grow on the weak bits of culture on the edge of the jar.
 
-Some people concern over the consistency of their starter. However, your starter will be happy at almost any consistency. I usually keep mine just watery enough so that it is not doughy at all. I find this consistency easy to handle and a suitable average for my recipes. If, however, I only made bread with my sourdough, I would keep it denser--the same consistency of the bread's sponge.
+Some people worry over the consistency of their starter. However, your starter will be happy at almost any consistency. I usually keep mine just watery enough so that it is not doughy at all. I find this consistency easy to handle and a suitable average for my recipes. If, however, I only made bread with my sourdough, I would keep it denser--the same consistency of the bread's sponge.
 
 Sourdough Quotes
 ----------------
