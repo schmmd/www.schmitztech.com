@@ -7,13 +7,12 @@ layout: default
 
 I am a graduate from the [University of Washington](http://www.washington.edu/)
 in the [Department of Computer Science](http://cs.washington.edu/) and the
-[Department of Mathematics](http://math.washington.edu/). Programming languages
-fascinate me and I have recently become a scala proselytizer.  Presently I am
-working in the field of Artificial Intelligence, specifically NLP.
+[Department of Mathematics](http://math.washington.edu/).  I'm currently a
+Director of Engineering at the [Allen Institute for AI](http://www.allenai.org).
 
 Outside of work, I enjoy hiking in the Cascades, kayaking through the San
-Juans, baking bread in my cob oven, cidermaking in the fall, and living
-the island life on Whidbey Island.
+Juans, baking bread in my cob oven, cidermaking in the fall, and living the
+island life on Whidbey Island.
 
 ### Pages
 
