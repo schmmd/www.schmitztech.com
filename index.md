@@ -16,14 +16,13 @@ island life on Whidbey Island.
 
 ### Pages
 
-*  [Photos](http://static.schmitztech.com/photo). See the pictures I have taken.
 *  Eating and drinking.
     - [Alcohol]({{ base.url }}/category/alcohol.html). In moderation, of course.
+    - [Cob Oven](/food/coboven.html). Earth oven cooking.
     - [Jam](/food/jam.html).
+    - [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
     - [Recipes]({{ base.url }}/category/recipes.html).
     - [Sourdough](/food/sourdough.html). The staff of life.
-    - [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
-    - [Cob Oven](/food/coboven.html). Earth oven cooking.
 *  Interests.
     - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
     - [Linux]({{ base.url }}/category/linux.html). Follow my Linux setup and customizations.
