@@ -26,3 +26,26 @@ I find this dough sometimes seems too runny at first. If you let it stand for 15
 oats and flour absorb the moisture and it becomes stiffer. Alternatively, you can add a quarter cup
 more flour, or until the dough can be formed into balls. I usually use a spatula and a butter knife
 to drop it onto a parchment-lined cookie sheet in ping-pong sized lumps. Bake for 12-14 minutes.
+
+---
+
+Some of you may know that I enjoy foraging--whether it's for thimbleberries, dandelion roots,
+turning blanks, or plant starts.  Recently I've been quite obsessive with black walnuts--one of the
+native walnuts of North America--ever since I stumbled across a mature tree dropping its fruit in
+Everett last fall.
+
+![Black Walnuts]({{ baseurl }}/assets/img/blackwalnut.png)
+
+If you ever see me wearing a splotchy brown shirt--it's an early experiment in dying with black
+walnut husks (I've since improved).  More recently I've been eating black walnuts.  My wife made
+some cookies to share with you--they are over by my desk in front of the metrics computer.   While I
+didn't gather these nuts myself, they are wild foraged black walnuts because that's the most
+economical way to collect them.
+
+Fun facts about black walnuts:
+* Black walnuts are among the hardest nuts to crack.  You can do it with a hammer and some railroad tie or you need a dedicated black walnut nut cracker.  Many people (my father included) remember the struggle of cracking black walnuts in their youth for their parents.
+* Black walnut ice cream used to be a common flavor.  Apparently it was one of my grandmother's favorites.
+* Black walnuts have more protein than any other nut.
+* When first tasking black walnuts, some people exclaim, "Looks like a walnut, but tastes like a cherry!"
+
+Presently most people eat very few wild foods, if any--most having being highly domesticated.  If you try one, I hope you enjoy the novel flavor of these black walnut chocolate chunk cookies.
