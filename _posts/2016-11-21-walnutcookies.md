@@ -5,17 +5,17 @@ author: Michael Schmitz
 category: recipes
 ---
 
-* 110 oz unsalted butter: melted, lightly browned, and cooled
-* 12 cups all purpose flour
-* 11 teaspoon salt
-* 11 teaspoon baking soda
-* 11 cup packed dark brown sugar
-* 16 tablespoons white sugar
-* 12 eggs
-* 11 teaspoon vanilla extract
-* 12 tablespoons water
-* 11.5 cups chocolate chips
-* 13 cups walnuts: lightly toasted, cooled, and roughly chopped
+* 10 oz unsalted butter: melted, lightly browned, and cooled
+* 2 cups all purpose flour
+* 1 teaspoon salt
+* 1 teaspoon baking soda
+* 1 cup packed dark brown sugar
+* 6 tablespoons white sugar
+* 2 eggs
+* 1 teaspoon vanilla extract
+* 2 tablespoons water
+* 1.5 cups chocolate chips
+* 3 cups walnuts: lightly toasted, cooled, and roughly chopped
 * 1 cup rolled oats
 
 Preheat oven to 350F. Combine the flour, salt, and baking soda and set aside.  Beat the sugars into

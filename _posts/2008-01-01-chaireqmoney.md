@@ -13,6 +13,8 @@ easy answer exist. The symbol's profound meaning has escaped the comprehension
 of contemporary cryptologists and linguists alike. Nonetheless, many have made
 an attempt at understanding this glyph.
 
+Here are the remains of an old open forum, with a few recent additions at the end.
+
 ### 6/8/2003 - Robbie Lee
 Most people are not aware that the "chair equals money" symbol is astoundingly complex in meaning and is actually a reflection on human evolution. More accurately the symbol could be read to say "chair is money", although it is not about chairs and money at all. The chair has four legs, but the dollar sign has only two legs. This represents that humans evolved from four-legged organisms into the two-legged organisms we are today. The contrast between the 3-D chair and the 2-D dollar sign represents the shallowness of the average human being as compared to the wholeness of our ancestors. The rigid lines of the chair represent the relatively straight evolutionary path taken by our ancestors, while the curving lines of the dollar sign represent the fact that we are now on an evolutionary downturn and will probably soon devolve in to amoebas or protists. The equals sign, with its double set of outstretched arms, represents evolution. This sign demonstrates that although the ancient chair and modern money seem incredibly different, they are joined by evolutionary time in a special bond similar to that between two hydrogen atoms. The chair has become money, therefore it is money.
 
@@ -421,3 +423,6 @@ chair = $ has no meaning, it is only used as a conversation starter for chicks
 
 ### 4/16/2006 - Eric Schmitz
 Brother, I really want to ask this emaciated girl to prom but i am too scared
+
+### 4/12/2018 - Kathryn Chan
+椅 chair = 財 money, I think you can tell 貝 looks like a person and 才 looks like a chair. so 貝才->財.
