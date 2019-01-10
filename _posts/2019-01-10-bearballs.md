@@ -14,13 +14,6 @@ category: recipes
 
 mix together and form into balls, roll  in
 
-## Alternate trail balls
+- 1⁄4 cup toasted wheat germ
 
-- 1 cup peanut butter
-- ½ cup quick oats
-- ½ cup crushed chocolate chips
-
-mix together and form into balls, roll  in
-
-- ½ cup sweetened coconut flakes
-
+Optionally add cocoa powder or chocolate chips.
