@@ -2,7 +2,7 @@
 layout: default
 title: Plum Wine
 author: Michael Schmitz
-category: alcohol
+category: fermentation
 ---
 
 On Whidbey we have a huge Shiro plum tree.  It produced around 15 gallons of

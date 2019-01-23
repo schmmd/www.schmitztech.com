@@ -17,9 +17,9 @@ island life on Whidbey Island.
 ### Pages
 
 *  Eating and drinking.
-    - [Alcohol]({{ base.url }}/category/alcohol.html). In moderation, of course.
     - [Cob Oven](/food/coboven.html). Earth oven cooking.
     - [Jam](/food/jam.html).
+    - [Fermentation]({{ base.url }}/category/fermentation.html). In moderation, of course.
     - [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
     - [Recipes]({{ base.url }}/category/recipes.html).
     - [Sourdough](/food/sourdough.html). The staff of life.

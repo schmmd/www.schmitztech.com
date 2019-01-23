@@ -2,7 +2,7 @@
 layout: default
 title: Schmitz Harvest Brew
 author: Michael Schmitz
-category: alcohol
+category: fermentation
 ---
 
 Recipes

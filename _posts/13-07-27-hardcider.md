@@ -2,7 +2,7 @@
 layout: default
 title: Hard Cider
 author: Michael Schmitz
-category: alcohol
+category: fermentation
 ---
 
 In 2012 I built a cedar cider press for pressing the copious wild apples in

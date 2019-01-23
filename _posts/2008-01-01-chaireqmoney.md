@@ -367,8 +367,6 @@ micheal, invite me to your dorm sometime.
 ### 2/10/2005 - John C. Crapper
 When I invented the toilet, I didn't expect Michael to throw up in it after drinking at a party.
 
-Michael Schmitz: I have never vomitted from alcohol. Although I did wake up once with a bucket next to me...
-
 ### 2/22/2005 - Erika
 The chair represents the current requirements for a well paying job; you sit. Desk jobs are now the norm. There are barely any farmers or physical laborers, and (referencing back to the farmer) even if you look at the factory farm, the workers SIT next to machines and watch the wheels turn. For people to acquire money in this present day, they no longer perform a physical task or a trade, they rather write a proposal or design a building.
 
