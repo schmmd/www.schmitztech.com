@@ -33,6 +33,5 @@ island life on Whidbey Island.
 * Nostalgia. For those who miss the old website.
     - [Download]({{ base.url }}/category/olddownloads.html). Try some of the old software I have developed.
     - [Outdoors]({{ base.url }}/category/outdoors.html). Explore the outdoors (in my footsteps).
-    - [Old Site](http://www.schmitztech.com/nostalgia).  If you miss the old (somewhat broken now) site.
 
 Or you might be coming here to discover [why chair equals money](pages/chaireqmoney.html).
