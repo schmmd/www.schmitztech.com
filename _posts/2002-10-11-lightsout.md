@@ -9,3 +9,4 @@ A lights out clone. Try to turn off all the lights, but when you click on a squa
 
 
 * [Binaries (windows)](https://github.com/schmmd/lightsout/releases/download/v1.0.4/lightsout104.exe)
+* [Source code](https://github.com/schmmd/lightsout)
