@@ -10,4 +10,4 @@ features customizable background, customizable piece pictures, and a
 competitive two player mode. Without a doubt Schmitriz is my favorite Tetris,
 rivaled only by the originals.
 
-* [Binaries (windows)]({{ base.url }}/downloads/schmitriz106.exe)
+* [Binaries (windows)](https://github.com/schmmd/schmitriz/releases/download/v1.0.6/schmitriz106.exe)
