@@ -14,7 +14,7 @@ onto a dirt road spotten with large rocks. Every few minutes we had to scare
 cows away so we could keep moving forward. I prayed that when we came back
 there would not be any cows sleeping on the road.
 
-At the end of the road, however, we were suprised to see a rather developed
+At the end of the road, however, we were surprised to see a rather developed
 parking lot. It was even equipped with outhouses and a trash can! The trail to
 horseshoe basin maintained an easy grade the whole way, although it actually
 starts sloping downwards for about a mile. Moreover, it slopes through a dead
