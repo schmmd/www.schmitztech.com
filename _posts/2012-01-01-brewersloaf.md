@@ -5,7 +5,7 @@ author: Michael Schmitz
 category: recipes
 ---
 
-It's suprisingly difficult to make wonderful bread from spent grain. Despite
+It's surprisingly difficult to make wonderful bread from spent grain. Despite
 its wonderful scent, adding spent grain to bread early causes a sharply acidic
 smell with strong biological odors (similar to a light vomit). Surprisingly,
 the malodor seems to dissipate with time as the loaf loses moisture and the

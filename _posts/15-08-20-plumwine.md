@@ -11,7 +11,7 @@ nearly enough.  This year we tried a couple of plum wine recipes.
 
 ## First Recipe
 
-We made a triple batched (all ingredients multipled by 3).
+We made a triple batched (all ingredients multiplied by 3).
 
 * 8 lb plums, pitted
 * 3 pints water
@@ -30,9 +30,9 @@ We tried a recipe with no added water.
 * 1 lb sugar
 * 1/2 t acid blend
 * 1 1/2 t pectic enzyme
-* 1 t yeat nutrient
+* 1 t yeast nutrient
 * 2 campden tablets
-* 1 package wine yeat
+* 1 package wine yeast
 
 # 2016 Plum Wine
 
@@ -43,7 +43,7 @@ the alcohol to the maximum (~ 14%) and the sweetness slightly.
 * 1 gallon crushed plums (pits too)
 * 2 lb sugar
 * 1/2 tsp acid blend
-* 1 1/2 tsp pctic enzyme
+* 1 1/2 tsp pectic enzyme
 * 1 tsp yeast nutrient
 * 2 camden tablets
 * 1 package yeast (Cote des Blancs)

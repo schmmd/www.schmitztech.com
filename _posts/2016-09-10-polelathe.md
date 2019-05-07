@@ -88,7 +88,7 @@ The spring pole doubled as an unparalleled cat toy.
 As winter came, I needed an indoor solution to my pole lathe because it's
 constantly raining and it's dark by 5.  At first I thought I should jump
 headfirst into building a treadle lathe, but instead I built a double spring
-pole lathe, roughtly following Roy Underhill's design in [The Woodwright's
+pole lathe, roughly following Roy Underhill's design in [The Woodwright's
 Shop: A Practical Guide to Traditional
 Woodcraft](https://www.amazon.com/Woodwrights-Shop-Practical-Traditional-Woodcraft/dp/0807840823/ref=la_B001JSBCO0_1_1?s=books&ie=UTF8&qid=1480727520&sr=1-1).
 

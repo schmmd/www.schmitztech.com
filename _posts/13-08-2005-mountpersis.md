@@ -21,7 +21,7 @@ dirty path begins, marked only be a decrepit cairn.
 
 The trail begins very steep. After about an hour it flattens out a bit,
 however. Another half hour later we reached boulder fields and two lakes.
-Ealier in the season I would guess there is quite a bit of water up there. In
+Earlier in the season I would guess there is quite a bit of water up there. In
 another half hour we reached the summit. To the north, the cliff was rather
 sheer. Overall the summit didn't compare to nearby peaks, but it was well worth
 the two hour hike.
