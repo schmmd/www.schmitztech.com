@@ -157,5 +157,9 @@ footer {
     body {
         font-size: 100%;
     }
+
+    nav a[href] {
+        margin-right: 0.5rem;
+    }
 }
 
