@@ -1,30 +1,165 @@
-.gallery {
--webkit-column-count: 3;
--moz-column-count: 3;
-column-count: 3;
--webkit-column-width: 33%;
--moz-column-width: 33%;
-column-width: 33%; }
-.gallery .pics {
--webkit-transition: all 350ms ease;
-transition: all 350ms ease; }
-.gallery .animation {
--webkit-transform: scale(1);
--ms-transform: scale(1);
-transform: scale(1); }
-
-@media (max-width: 450px) {
-.gallery {
--webkit-column-count: 1;
--moz-column-count: 1;
-column-count: 1;
--webkit-column-width: 100%;
--moz-column-width: 100%;
-column-width: 100%;
-}
+:root {
+    --pecan: #e5caac;
+    --walnut: #2b2024;
+    --cherry: #63453c;
 }
 
-.wrapper {
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background: #fff;
+    padding: 2rem;
+}
+
+body {
+    max-width: 940px;
+    font-family: 'Noto Serif', serif;
+    font-size: 125%; /* 20 / 16 x 100 */
+    line-height: 1.8;
+    font-weight: 400;
+}
+
+html,
+body,
+header,
+main,
+footer {
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
+    align-items: center;
 }
+
+body,
+main,
+header,
+footer,
+.max-width-content {
+    flex-grow: 1;
+    width: 100%;
+}
+
+
+.max-width-content {
+    max-width: 46rem;
+}
+
+body,
+h1,
+h2,
+h3,
+h4 {
+    color: var(--walnut);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+    margin: 2rem 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+strong {
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 1.25em;
+}
+
+h4 {
+    font-size: 1.125em;
+}
+
+a[href] {
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--cherry);
+}
+
+header h1 {
+    margin: 0 0 0.5rem;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+nav a[href] {
+    padding: 0 1rem 0.5rem;
+    margin-right: 2rem;
+    text-decoration: none;
+}
+
+nav a[href]:hover {
+    border-bottom: 4px solid var(--pecan);
+}
+
+nav a[href].active {
+    border-bottom: 4px solid var(--cherry);
+}
+
+nav a:last-child {
+    margin-right: 0;
+}
+
+img,
+iframe {
+    border-radius: 8px;
+}
+
+img {
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+}
+
+.image-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.image-list li {
+    margin: 2rem 0;
+}
+
+.image-list li:first-child {
+    margin-top: 0;
+}
+
+footer {
+    padding: 2rem 0;
+    border-top: 1px solid var(--pecan);
+}
+
+@media screen and (max-width: 640px) {
+    body {
+        font-size: 100%;
+    }
+
+    nav a[href] {
+        margin-right: 0.5rem;
+    }
+}
+
