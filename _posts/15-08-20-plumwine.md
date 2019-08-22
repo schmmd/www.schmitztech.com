@@ -5,6 +5,24 @@ author: Michael Schmitz
 category: fermentation
 ---
 
+# 2019 Plum Ferments
+
+This year we had a huge harvest and ended up with 14 gallons of crushed plums.  4 gallons we fermented for vinegar, so we added no campden tablets.
+
+* 4 gallons crushed plums (skins, pits too)
+* 3 lb sugar (targeting approx. 8% ABV)
+* 2 tsp acid blend
+* 2 TBS pectic enzyme
+* 4 tsp yeast nutrient
+* 1 package yeast (Cote des Blancs)
+
+A day after pitching the yeast the solids rose to the top and we scooped them off.
+
+We added campden to the remaining 10 gallons and waited 24 hours before pitching the yeast.
+We followed the 2016 recipe, but added less sugar, but we also aimed to reduce the tartness by removing the skins earlier.
+The plums have about 10 oz / gallon sugar naturally, and we added 18 lbs of sugar to increase this to 39 oz sugar / gallon while expecting 33 oz sugar / gallon to ferment (14% ABV).
+We removed the solids/skins/pits as soon as possible, which was a day after pitching the yeast once fermentation bubbles rose the solids to the surface.
+
 # 2016 Plum Wine
 
 Our previous plum wine was delicious, but quite tart--particularly in the
