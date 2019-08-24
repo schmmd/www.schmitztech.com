@@ -23,6 +23,12 @@ We followed the 2016 recipe, but added less sugar, but we also aimed to reduce t
 The plums have about 10 oz / gallon sugar naturally, and we added 18 lbs of sugar to increase this to 39 oz sugar / gallon while expecting 33 oz sugar / gallon to ferment (14% ABV).
 We removed the solids/skins/pits as soon as possible, which was a day after pitching the yeast once fermentation bubbles rose the solids to the surface.
 
+1.  To the 10 gallons we added 3 T yeast nutrient, 3 T acid blend, 3 T pectic enzyme, 8 lbs sugar, 2 packages cotes de blanc.
+2.  After a day, skimmed the solids.
+3.  To the remaining 7 gallons we added 6 lbs sugar and 4 T yeast nutrient, 1/2 tsp acid blend, 1/2 tsp pectic enzyme.
+
+Next year we would add the yeast nutrient, pectic enzyme, and yeast and let it ferment for a day to make it easier to remove the pits and skins.  Once the debris rises to the top, we would skim it off and then add the sugar and acid blend (measured against the remaining liquid).
+
 # 2016 Plum Wine
 
 Our previous plum wine was delicious, but quite tart--particularly in the
