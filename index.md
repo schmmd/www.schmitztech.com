@@ -1,6 +1,6 @@
 ---
 title: Michael Schmitz
-layout: default
+layout: index
 ---
 
 ### About
