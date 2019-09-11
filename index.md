@@ -25,6 +25,7 @@ Juans, turning wooden bowls, and living the island life on Whidbey Island.
     - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
     - [Linux]({{ base.url }}/category/linux.html). Follow my Linux setup and customizations.
     - [Projects]({{ base.url }}/category/projects.html). Learn about projects I've built.
+    - [Wood]({{ base.url }}/wood). A separate site focused around the wooden bowls and other turned goods I sell.
 *  Fame.
     - [Working Geek](https://www.geekwire.com/2018/working-geek-artificial-intelligence-engineering-leader-michael-schmitz-loves-github-google-pixel-list-making/).  GeekWire selected me as a "Working Geek".
     - [Salish Sea Conference Panel](https://www.eopugetsound.org/magazine/ssec2018/digital-tech).  I participated in a panel to discuss how technology companies and our region's rising population is affecting Salish Sea recovery efforts.
