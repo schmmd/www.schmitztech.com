@@ -5,8 +5,6 @@ author: Michael Schmitz
 category: recipes
 ---
 
-# Bear Balls
-
 - ½ cup peanut butter
 - ½ cup honey
 - 1 cup powdered milk

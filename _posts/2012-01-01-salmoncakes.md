@@ -5,8 +5,6 @@ author: Michael Schmitz
 category: recipes
 ---
 
-## Salmon Cakes
-
 Recipe adopted from Craig French and Laura Reidt.
 
 Salmon Cake:

@@ -5,7 +5,7 @@ author: Michael Schmitz
 category: recipes
 ---
 
-=== Dutch Oven Recipe ===
+### Dutch Oven Recipe
 
 Feeds five, easily!  The recipe was adapted from "The Dutch Oven Cookbook:
 Recipes for the Best Pot in Your Kitchen" by Sharon Kramis and Julie
@@ -31,7 +31,7 @@ potatoes are tender (about 15 minutes).  Add corn, green onion, salmon, and
 cream.  Simmer 8 minutes more, or until done.
 
 
-=== Backcountry Recipe ===
+### Backcountry Recipe
 
 Feeds two, while camping!
 
