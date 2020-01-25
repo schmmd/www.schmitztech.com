@@ -5,8 +5,6 @@ author: Michael Schmitz
 category: projects
 ---
 
-# Pole Lathe
-
 ![Pole Lathe Closeup]({{ baseurl }}/assets/img/polelathe-closeup.jpg)
 
 In May of 2016, I started making a pole lathe.  I don't know why I started
