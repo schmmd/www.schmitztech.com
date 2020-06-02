@@ -2,3 +2,5 @@ name: Schmitztech
 highlighter: rouge
 permalink: none
 baseurl:  
+collections:
+  - inventory
