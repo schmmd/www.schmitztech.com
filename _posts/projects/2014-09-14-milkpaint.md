@@ -2,7 +2,7 @@
 layout: default
 title: Milk Paint
 author: Michael Schmitz
-category: home
+category: projects
 ---
 
 Our deck dutch door needed a new coat of paint, and we tried out milk paint.
