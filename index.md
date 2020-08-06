@@ -18,6 +18,7 @@ Juans, turning wooden bowls, and living the island life on Whidbey Island.
     - [Cob Oven](/food/coboven.html). Earth oven cooking.
     - [Jam](/food/jam.html).
     - [Fermentation]({{ base.url }}/category/fermentation.html). In moderation, of course.
+    - [Fish and Chips](/food/fishnchips.html).
     - [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
     - [Recipes]({{ base.url }}/category/recipes.html).
     - [Sourdough](/food/sourdough.html). The staff of life.
