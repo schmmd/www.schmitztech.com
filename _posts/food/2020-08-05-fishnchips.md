@@ -13,11 +13,11 @@ a craving.
 * Sea Js, Port Townsend.  Best fish and chips in Washington, but you might skip
   on the coffee.
 
-* Lockspot, Seatle.  A favorite place to eat fish and chips on a dark and
+* Lockspot, Seattle.  A favorite place to eat fish and chips on a dark and
   stormy Tuesday night, before a late night walk through the pitch dark in
   Discovery Park.  Plus they have a happy hour special on Tuesday before 7!
 
-* Pacific Inn, Seattle.  Delicious breaded fish and chips.
+* Pacific Inn, Seattle.  Delicious breaded fish and chips. The hobo on the sign recommends them too!
 
 * The Big W, Bayview.  A large fish fillet with excellent fries
 
