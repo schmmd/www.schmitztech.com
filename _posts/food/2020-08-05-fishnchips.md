@@ -35,5 +35,5 @@ a craving.
 
 ## I don't need them again
 
-* Chinooks, Seattle.  They havea fish window, but the fish and chips were
-  thorougly disappointing.
+* Chinooks, Seattle.  They have a fish window, but the fish and chips were
+  disappointing.
