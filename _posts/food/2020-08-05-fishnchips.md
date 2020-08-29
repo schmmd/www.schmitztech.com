@@ -11,7 +11,8 @@ a craving.
 ## Very Special
 
 * Sea Js, Port Townsend.  Best fish and chips in Washington, but you might skip
-  on the coffee.
+  on the coffee.  Crispy yet moist, and served with not only coleslaw but
+  buttered toast! "The only place for fish and chips."
 
 * Lockspot, Seattle.  A favorite place to eat fish and chips on a dark and
   stormy Tuesday night, before a late night walk through the pitch dark in
