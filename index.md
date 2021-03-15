@@ -34,4 +34,4 @@ Juans, turning wooden bowls, and living the island life on Whidbey Island.
     - [Download]({{ base.url }}/category/olddownloads.html). Try some of the old software I have developed.
     - [Outdoors]({{ base.url }}/category/outdoors.html). Explore the outdoors (in my footsteps).
 
-Or you might be coming here to discover [why chair equals money](pages/chaireqmoney.html).
+Or you might be coming here to discover [why chair equals money](pages/chaireqmoney.html)?
