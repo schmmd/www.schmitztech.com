@@ -22,6 +22,7 @@ Juans, turning wooden bowls, and living the island life on Whidbey Island.
     - [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
     - [Recipes]({{ base.url }}/category/recipes.html).
     - [Sourdough](/food/sourdough.html). The staff of life.
+    - [Walnuts](/food/walnuts.html). The king of nuts.
 *  Interests.
     - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
     - [Linux]({{ base.url }}/category/linux.html). Follow my Linux setup and customizations.
