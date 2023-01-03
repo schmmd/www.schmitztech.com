@@ -24,6 +24,9 @@ a craving.
 
 * Dockside Fish Market, Grand Marais.  Catch of the day cooked up fresh.  If you bring your own wooden bowl they will fill it up instead of giving you styrofoam to go.
 
+* Blackbird (Shoreline).  Exquisite fish with way many small tasty fries.
+  The coleslaw was fresh and delicious, without tasting too healthy.
+
 ## Dependably Good
 
 * Ivars, Mukilteo.  Waiting for a ferry?  Well you might as well chow down on
