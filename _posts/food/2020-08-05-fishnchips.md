@@ -20,8 +20,6 @@ a craving.
 
 * Pacific Inn, Seattle.  Delicious breaded fish and chips. The hobo on the sign recommends them too!
 
-* The Big W, Bayview.  A large fish fillet with excellent fries
-
 * Dockside Fish Market, Grand Marais.  Catch of the day cooked up fresh.  If you bring your own wooden bowl they will fill it up instead of giving you styrofoam to go.
 
 * Blackbird (Shoreline).  Exquisite fish with way many small tasty fries.

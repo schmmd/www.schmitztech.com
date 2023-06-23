@@ -12,9 +12,10 @@ Whidbey Island is the longest island in the contiguous United States.  The restr
 Free popcorn is tablestakes for businesses on the island.  The following locations have been verified to have free popcorn in the past, and thus are part of the Whidbey Island Popcorn Tour.  The pandemic put a dent in free popcorn, but it has recently been making a comeback.
 
 1.  Tires Les Schwab, Clinton
-2.  Pet store?
+2.  Pet store? (this may be a legend)
 3.  The Clyde, Langley (costs money, but is a great deal)
 4.  Sebos, Bayview
 5.  Hansens, Bayview
 6.  Ace, Freeland
 7.  Greenbank Store, Greenbank (currently closed)
+8.  Skagit Valley College, Oak Harbor
