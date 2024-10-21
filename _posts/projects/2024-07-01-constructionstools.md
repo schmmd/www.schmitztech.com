@@ -5,7 +5,7 @@ author: Michael Schmitz
 category: projects
 ---
 
-## Wooden Crates
+## Construction  Stools
 
 ![Construction Stools]}/assets/img/construction-stools.jpg)
 
