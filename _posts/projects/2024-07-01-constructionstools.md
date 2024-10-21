@@ -7,7 +7,7 @@ category: projects
 
 ## Construction  Stools
 
-![Construction Stools](/assets/img/construction-stools.jpg)
+![Construction Stools](/assets/img/construction-stool.jpg)
 
 Our house build had quite a few 2x12" rafter offcuts and I wanted to find a use
 for them.  I ended up making some "construction stools"--small stools made
