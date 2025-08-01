@@ -1,0 +1,10 @@
+---
+title: Cocktails
+layout: default
+---
+
+{% for post in site.categories.cocktails %}
+<ul>
+  <li><a href="{{ post.url }}">{{ post.title }}</a> ({{post.date|date:"%-d %B %Y"}})</li>
+</ul>
+{% endfor %}

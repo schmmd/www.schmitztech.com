@@ -2,7 +2,7 @@
 layout: default
 title: Pina Colada
 author: Michael Schmitz
-category: recipes
+category: cocktails
 ---
 
 ## Tradicional
