@@ -27,7 +27,7 @@ can be overwhelming.
 Michael Schmitz
 
 Combine:
- 
+
 * 2 c bread flour
 * 2 c barley flour
 * 1 c spent grain (moist)
