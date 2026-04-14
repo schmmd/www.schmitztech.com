@@ -3,6 +3,7 @@ layout: default
 title: Cranberry-Orange Bread
 author: Evie Noges
 category: recipes
+tags: [breads]
 ---
 
 Sift together:

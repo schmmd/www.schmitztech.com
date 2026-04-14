@@ -3,6 +3,7 @@ layout: default
 title: Snow Biscuits
 author: Michael Schmitz
 category: recipes
+tags: [breads]
 ---
 
 Modified from a recipe in Jake O'Shaughnessy's Sourdough Book by Timothy Firnstahl.

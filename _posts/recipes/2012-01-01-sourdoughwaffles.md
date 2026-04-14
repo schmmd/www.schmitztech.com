@@ -3,6 +3,7 @@ layout: default
 title: Sourdough Waffles
 author: Michael Schmitz
 category: recipes
+tags: [breakfast]
 ---
 
 This is a recipe from my grandmother, who grew up in Oregon.

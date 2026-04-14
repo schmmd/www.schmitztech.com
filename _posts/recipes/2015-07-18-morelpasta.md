@@ -2,6 +2,7 @@
 layout: default
 title: Pasta with Creamy Morel Sauce
 category: recipes
+tags: [entrees]
 ---
 
 1. Rehydrate morels in 1c chicken broth (better than bullion).  Save the broth.

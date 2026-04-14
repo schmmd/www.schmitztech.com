@@ -3,6 +3,7 @@ layout: default
 title: Schmitz Peak
 author: Michael Schmitz
 category: recipes
+tags: [desserts]
 ---
 
 ## Chocolate chestnut tart - our riff on Mont Blanc

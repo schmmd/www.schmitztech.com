@@ -3,6 +3,7 @@ layout: default
 title: Salmon Quinua Chowder
 author: Michael Schmitz
 category: recipes
+tags: [entrees]
 ---
 
 ### Dutch Oven Recipe

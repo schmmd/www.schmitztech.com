@@ -3,6 +3,7 @@ layout: default
 title: Dulce de Leche
 author: Michael Schmitz
 category: recipes
+tags: [sauces]
 ---
 
 This recipe is from my Argentine host mother, Carmen Murphy.

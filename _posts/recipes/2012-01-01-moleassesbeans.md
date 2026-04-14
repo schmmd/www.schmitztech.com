@@ -3,6 +3,7 @@ layout: default
 title: Mole Asses Beans
 author: Michael Schmitz
 category: recipes
+tags: [sides]
 ---
 
 Beans:

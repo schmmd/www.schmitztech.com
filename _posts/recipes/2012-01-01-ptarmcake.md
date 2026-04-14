@@ -3,6 +3,7 @@ layout: default
 title: Ptarm (Sourdough Chocolate) Cake
 author: Michael Schmitz
 category: recipes
+tags: [desserts]
 ---
 
 1st step:

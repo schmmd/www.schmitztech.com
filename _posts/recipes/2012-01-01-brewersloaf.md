@@ -3,6 +3,7 @@ layout: default
 title: Brewer's Loaf
 author: Michael Schmitz
 category: recipes
+tags: [breads]
 ---
 
 It's surprisingly difficult to make wonderful bread from spent grain. Despite

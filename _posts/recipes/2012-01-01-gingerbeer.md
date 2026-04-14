@@ -3,6 +3,7 @@ layout: default
 title: Ginger Beer
 author: Michael Schmitz
 category: recipes
+tags: [drinks]
 ---
 
 This recipe makes a delicious, full-bodied ginger beer with a powerful ginger flavor, unlike many of the commercial variants.

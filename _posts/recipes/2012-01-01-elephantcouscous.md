@@ -3,6 +3,7 @@ layout: default
 title: Elephant Cous Cous
 author: Michael Schmitz
 category: recipes
+tags: [entrees]
 ---
 
 Recipe from Sara Owens.

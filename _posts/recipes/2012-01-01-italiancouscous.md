@@ -3,6 +3,7 @@ layout: default
 title: Italian Cous-cous
 author: Michael Schmitz
 category: recipes
+tags: [breads]
 ---
 
 Mix:

@@ -2,6 +2,7 @@
 layout: default
 title: Plum Chutney and Pulled Pork
 category: recipes
+tags: [entrees]
 ---
 
 Recipe based on:

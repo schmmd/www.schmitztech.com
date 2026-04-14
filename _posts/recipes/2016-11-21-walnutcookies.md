@@ -3,6 +3,7 @@ layout: default
 title: Walnut Cookies
 author: Michael Schmitz
 category: recipes
+tags: [desserts]
 ---
 
 * 10 oz unsalted butter: melted, lightly browned, and cooled

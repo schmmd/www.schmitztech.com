@@ -3,6 +3,7 @@ layout: default
 title: Careks Beans
 author: Michael Schmitz
 category: recipes
+tags: [entrees]
 ---
 
 Ingredients:

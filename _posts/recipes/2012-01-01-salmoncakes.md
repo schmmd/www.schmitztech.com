@@ -3,6 +3,7 @@ layout: default
 title: Salmon Cakes
 author: Michael Schmitz
 category: recipes
+tags: [entrees]
 ---
 
 Recipe adopted from Craig French and Laura Reidt.

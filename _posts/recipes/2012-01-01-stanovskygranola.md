@@ -3,6 +3,7 @@ layout: default
 title: Stanovsky Granola
 author: Michael Schmitz
 category: recipes
+tags: [breakfast]
 ---
 
 Mix:

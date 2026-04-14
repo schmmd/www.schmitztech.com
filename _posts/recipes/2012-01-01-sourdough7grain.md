@@ -3,6 +3,7 @@ layout: default
 title: Sourdough 7 Grain
 author: Michael Schmitz
 category: recipes
+tags: [breads]
 ---
 
 Combine:

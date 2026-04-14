@@ -3,6 +3,7 @@ layout: default
 title: Bear Balls
 author: Michael Schmitz
 category: recipes
+tags: [snacks]
 ---
 
 - ½ cup peanut butter

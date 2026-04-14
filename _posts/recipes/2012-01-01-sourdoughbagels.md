@@ -3,6 +3,7 @@ layout: default
 title: Sourdough Bagels
 author: Michael Schmitz
 category: recipes
+tags: [breads]
 ---
 
 Ingredients:

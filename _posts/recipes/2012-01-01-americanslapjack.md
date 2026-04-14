@@ -3,6 +3,7 @@ layout: default
 title: American Slapjack
 author: Michael Schmitz
 category: recipes
+tags: [breakfast]
 ---
 
 This recipe was modified from "Jake O'Shaughnessey's Sourdough Bread Book: A Most Complete Compendium of Fine Old Sourdough Recipes" by Timothy Firnstahl.

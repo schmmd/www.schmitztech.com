@@ -3,6 +3,7 @@ layout: default
 title: Cowboy Coffee
 author: Michael Schmitz
 category: recipes
+tags: [drinks]
 ---
 
 > "Cowboy coffee is a form of black art, and getting a good cup of coffee

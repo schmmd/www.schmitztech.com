@@ -3,6 +3,7 @@ layout: default
 title: Llama Cookies
 author: Michael Schmitz
 category: recipes
+tags: [desserts]
 ---
 
 Although they do not actually contain llama, Llama Cookies are absolutely

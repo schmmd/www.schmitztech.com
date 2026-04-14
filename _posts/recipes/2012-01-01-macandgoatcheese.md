@@ -3,6 +3,7 @@ layout: default
 title: Mac and 'n Goat Cheese
 author: Michael Schmitz
 category: recipes
+tags: [entrees]
 ---
 
 Yield: 4 portions

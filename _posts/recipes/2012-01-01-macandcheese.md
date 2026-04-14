@@ -3,6 +3,7 @@ layout: default
 title: Macaroni and Cheese
 author: Michael Schmitz
 category: recipes
+tags: [entrees]
 ---
 
 Macaroni and Cheese (microwave recipe) from Maureen Schmitz.
