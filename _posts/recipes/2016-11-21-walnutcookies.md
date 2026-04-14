@@ -35,7 +35,7 @@ turning blanks, or plant starts.  Recently I've been quite obsessive with black 
 native walnuts of North America--ever since I stumbled across a mature tree dropping its fruit in
 Everett last fall.
 
-![Black Walnuts]({{ baseurl }}/assets/img/blackwalnut.png)
+![Black Walnuts]({{ site.baseurl }}/assets/img/blackwalnut.png)
 
 If you ever see me wearing a splotchy brown shirt--it's an early experiment in dying with black
 walnut husks (I've since improved).  More recently I've been eating black walnuts.  My wife made
