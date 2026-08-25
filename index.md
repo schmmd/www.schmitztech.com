@@ -16,7 +16,6 @@ Juans, turning wooden bowls, and living the island life on Whidbey Island.
 
 *  Eating and drinking.
     - [Cob Oven](/food/coboven.html). Earth oven cooking.
-    - [Cocktails]({{ site.baseurl }}/category/cocktails.html).
     - [Jam](/food/jam.html).
     - [Fermentation]({{ site.baseurl }}/category/fermentation.html). In moderation, of course.
     - [Fish and Chips](/food/fishnchips.html).
