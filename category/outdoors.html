@@ -1,10 +1,5 @@
 ---
 title: Outdoors
-layout: default
+layout: category
+category_name: outdoors
 ---
-
-{% for post in site.categories.outdoors %}
-<ul>
-  <li><a href="{{ post.url }}">{{ post.title }}</a> ({{post.date|date:"%-d %B %Y"}})</li>
-</ul>
-{% endfor %}

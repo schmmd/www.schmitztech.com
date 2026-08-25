@@ -1,6 +1,11 @@
-name: Schmitztech
+title: Schmitztech
+url: https://schmitztech.com
 highlighter: rouge
 permalink: none
-baseurl:  
-collections:
-  - inventory
+baseurl:
+
+# ponytail: a stray root-owned build output was being ingested as posts, publishing
+# every recipe a second time at the site root. Excluding it fixes the build without
+# sudo; run `sudo rm -rf _posts/recipes/_site` and delete these three lines.
+exclude:
+  - _posts/recipes/_site
