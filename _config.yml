@@ -1,6 +1,5 @@
-name: Schmitztech
+title: Schmitztech
+url: https://schmitztech.com
 highlighter: rouge
 permalink: none
-baseurl:  
-collections:
-  - inventory
+baseurl:

@@ -1,10 +1,9 @@
 ---
-title: Michael Schmitz
 layout: default
 ---
 
-{% for post in site.categories.home %}
 <ul>
+{% for post in site.categories[page.category_name] %}
   <li><a href="{{ post.url }}">{{ post.title }}</a> ({{post.date|date:"%-d %B %Y"}})</li>
-</ul>
 {% endfor %}
+</ul>
