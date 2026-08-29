@@ -5,12 +5,13 @@ layout: default
 
 ### About
 
-I am a software engineer, manager, and bowl turner in the Pacific Northwest.
-I'm an alumnus of the [University of Washington](http://www.washington.edu/)
-and my current position is Director of Engineering at the [Allen Institute for AI](http://www.allenai.org).
+Welcome to Schmitztech!  You might be here because you want to learn more about
+walnuts, you would like to aquire a wooden bowl, or you're curious to learn
+more about Michael Schmitz.
 
-Outside of work, I enjoy hiking in the Cascades, kayaking through the San
-Juans, turning wooden bowls, and living the island life on Whidbey Island.
+What is Schmitztech?  Well, I'm trying to answer that question.  Please explore
+for yourself by visiting one of the pages that has accumulated over the last 20
+years.
 
 ### Pages
 
