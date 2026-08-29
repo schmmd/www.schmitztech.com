@@ -3,3 +3,6 @@ url: https://schmitztech.com
 highlighter: rouge
 permalink: none
 baseurl:
+
+plugins:
+  - jekyll-feed
