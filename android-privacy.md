@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: plain
 title: Android App Privacy Policy
 author: Schmitztech LLC
 ---
