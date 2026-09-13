@@ -107,29 +107,6 @@ header h1 {
     font-size: 4em;
 }
 
-nav {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-nav a[href] {
-    padding: 0 1rem 0.5rem;
-    margin-right: 2rem;
-    text-decoration: none;
-}
-
-nav a[href]:hover {
-    border-bottom: 4px solid var(--pecan);
-}
-
-nav a[href].active {
-    border-bottom: 4px solid var(--cherry);
-}
-
-nav a:last-child {
-    margin-right: 0;
-}
-
 img,
 iframe {
     border-radius: 8px;
@@ -163,10 +140,6 @@ footer {
 @media screen and (max-width: 640px) {
     body {
         font-size: 100%;
-    }
-
-    nav a[href] {
-        margin-right: 0.5rem;
     }
 }
 
