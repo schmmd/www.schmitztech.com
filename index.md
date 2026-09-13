@@ -24,6 +24,8 @@ years.
     - Notes.
         - [Cob Oven](/food/coboven.html). Earth oven cooking.
         - [Jam](/food/jam.html).
+*  Software.
+    - [Games]({{ site.baseurl }}/category/software.html). Games I have written.
 *  Interests.
     - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
     - [Projects]({{ site.baseurl }}/category/projects.html). Learn about projects I've built.
