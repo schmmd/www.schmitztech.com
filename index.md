@@ -23,7 +23,6 @@ years.
     - [Walnuts](/food/walnuts.html). The king of nuts.
     - Notes.
         - [Cob Oven](/food/coboven.html). Earth oven cooking.
-        - [Jam](/food/jam.html).
 *  [Software]({{ site.baseurl }}/category/software.html).
 *  Interests.
     - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
