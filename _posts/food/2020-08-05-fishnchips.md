@@ -10,6 +10,10 @@ a craving.
 
 ## Very Special
 
+* Ikaika, Whidbey Island.  Amazing halibut and chips--although they recently
+  pivoted to greek food and may not serve fish and chips quite as often.
+  The halibut pieces can be huge!
+
 * Sea Js, Port Townsend.  Best fish and chips in Washington, but you might skip
   on the coffee.  Crispy yet moist, and served with not only coleslaw but
   buttered toast! "The only place for fish and chips."
