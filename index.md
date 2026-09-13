@@ -20,7 +20,6 @@ years.
     - [Jam](/food/jam.html).
     - [Fermentation]({{ site.baseurl }}/category/fermentation.html). In moderation, of course.
     - [Fish and Chips](/food/fishnchips.html).
-    - [Quinua](/food/quinua.html). Eat the wonder-sprout of the Inca.
     - [Recipes]({{ site.baseurl }}/category/recipes.html).
     - [Sourdough](/food/sourdough.html). The staff of life.
     - [Walnuts](/food/walnuts.html). The king of nuts.
