@@ -16,13 +16,14 @@ years.
 ### Pages
 
 *  Eating and drinking.
-    - [Cob Oven](/food/coboven.html). Earth oven cooking.
-    - [Jam](/food/jam.html).
     - [Fermentation]({{ site.baseurl }}/category/fermentation.html). In moderation, of course.
     - [Fish and Chips](/food/fishnchips.html).
     - [Recipes]({{ site.baseurl }}/category/recipes.html).
     - [Sourdough](/food/sourdough.html). The staff of life.
     - [Walnuts](/food/walnuts.html). The king of nuts.
+    - Notes.
+        - [Cob Oven](/food/coboven.html). Earth oven cooking.
+        - [Jam](/food/jam.html).
 *  Interests.
     - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
     - [Projects]({{ site.baseurl }}/category/projects.html). Learn about projects I've built.
