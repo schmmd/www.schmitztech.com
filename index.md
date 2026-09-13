@@ -26,7 +26,6 @@ years.
     - [Walnuts](/food/walnuts.html). The king of nuts.
 *  Interests.
     - [Iron](/pages/castiron.html). Cast iron, as a matter of fact.
-    - [Linux]({{ site.baseurl }}/category/linux.html). Follow my Linux setup and customizations.
     - [Projects]({{ site.baseurl }}/category/projects.html). Learn about projects I've built.
     - [Wood]({{ site.baseurl }}/wood). A separate site focused around the wooden bowls and other turned goods I sell.
 *  Fame.
