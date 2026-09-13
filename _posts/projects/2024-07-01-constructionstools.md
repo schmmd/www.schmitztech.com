@@ -3,6 +3,7 @@ layout: default
 title: Construction Stools
 author: Michael Schmitz
 category: projects
+tags: [woodworking]
 ---
 
 ## Construction  Stools

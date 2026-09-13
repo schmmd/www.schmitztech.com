@@ -3,6 +3,7 @@ layout: default
 title: Roubo Workbench
 author: Michael Schmitz
 category: projects
+tags: [woodworking]
 ---
 
 I decided that I finally needed a workbench, and settled on a Roubo design.

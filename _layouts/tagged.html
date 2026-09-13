@@ -1,0 +1,35 @@
+---
+layout: default
+---
+
+{% assign posts = site.categories[page.category_name] %}
+{% if page.tags.size > 0 %}
+{% assign all_tags = page.tags %}
+{% else %}
+{% assign tagged = posts | where_exp: "post", "post.tags.size > 0" %}
+{% assign all_tags = tagged | map: "tags" | join: "," | split: "," | uniq | sort %}
+{% endif %}
+{% assign untagged = posts | where_exp: "post", "post.tags.size == 0" %}
+
+<p>
+{% for tag in all_tags %}<a href="#{{ tag }}">{{ tag | capitalize }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}{% if untagged.size > 0 %} · <a href="#other">Other</a>{% endif %}
+</p>
+
+{% for tag in all_tags %}
+<h2 id="{{ tag }}">{{ tag | capitalize }}</h2>
+<ul>
+  {% assign tag_posts = posts | where_exp: "post", "post.tags contains tag" | sort: "title" %}
+  {% for post in tag_posts %}
+    <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
+{% endfor %}
+
+{% if untagged.size > 0 %}
+<h2 id="other">Other</h2>
+<ul>
+  {% for post in untagged %}
+  <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}

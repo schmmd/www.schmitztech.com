@@ -3,6 +3,7 @@ layout: default
 title: Pole Lathe
 author: Michael Schmitz
 category: projects
+tags: [woodworking]
 ---
 
 ![Pole Lathe Closeup]({{ baseurl }}/assets/img/polelathe-closeup.jpg)
