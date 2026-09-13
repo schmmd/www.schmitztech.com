@@ -99,6 +99,7 @@ a[href] {
 header img {
     padding: 10px;
     vertical-align: bottom;
+    max-height: 40vh;
 }
 
 header h1 {
