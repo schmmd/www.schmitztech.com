@@ -35,6 +35,7 @@ title: zangles
   Enter any three values of a triangle, including at least one side, and
   Zangles will find the rest. Side <i>a</i> is opposite angle <i>A</i>,
   <i>b</i> is opposite <i>B</i>, and <i>c</i> is opposite <i>C</i>.
+  Sides can be fractions, like <code>5/8</code> or <code>2 1/4</code>.
 </p>
 
 <form id="zangles-form">
@@ -44,9 +45,9 @@ title: zangles
     <label><input type="radio" name="unit" value="rad"> radians</label>
   </p>
   <div class="zangles-grid">
-    <label>Side a <input name="a" type="number" step="any" min="0"></label>
-    <label>Side b <input name="b" type="number" step="any" min="0"></label>
-    <label>Side c <input name="c" type="number" step="any" min="0"></label>
+    <label>Side a <input name="a" type="text" autocomplete="off" spellcheck="false"></label>
+    <label>Side b <input name="b" type="text" autocomplete="off" spellcheck="false"></label>
+    <label>Side c <input name="c" type="text" autocomplete="off" spellcheck="false"></label>
     <label>Angle A <input name="A" type="number" step="any" min="0"></label>
     <label>Angle B <input name="B" type="number" step="any" min="0"></label>
     <label>Angle C <input name="C" type="number" step="any" min="0"></label>
@@ -125,6 +126,18 @@ function fromSides([a, b, c]) {
 }
 
 const fmt = (x) => +x.toFixed(4);
+
+const VULGAR = { "¼": "1/4", "½": "1/2", "¾": "3/4", "⅛": "1/8", "⅜": "3/8", "⅝": "5/8", "⅞": "7/8", "⅓": "1/3", "⅔": "2/3" };
+// Read a side length: a decimal ("2.25"), a fraction ("5/8"), or a mixed
+// number ("2 1/4", "2-1/4", or "2½"). NaN if it's blank or can't be read.
+function parseLength(text) {
+  const t = text.replace(/[¼½¾⅛⅜⅝⅞⅓⅔]/g, (c) => ` ${VULGAR[c]}`).trim();
+  if (/^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/i.test(t)) return Number(t);
+  const m = t.match(/^([+-]?)(?:(\d+)[\s-]+)?(\d+)\s*\/\s*(\d+)$/);
+  if (!m || Number(m[4]) === 0) return NaN;
+  const x = Number(m[2] || 0) + Number(m[3]) / Number(m[4]);
+  return m[1] === "-" ? -x : x;
+}
 // Diagram label size and the largest the diagram is shown, in screen pixels.
 const FONT = 14, MAX_WIDTH = 480, MAX_HEIGHT = 360;
 // Loose enough that 1.5708 radians counts as a right angle.
@@ -314,8 +327,10 @@ const angleText = (deg) => (radians() ? `${+(deg * RAD).toFixed(4)} rad` : `${+d
 function update() {
   const inputs = names.map((n) => form.elements[n]);
   // Everything below works in degrees.
-  const v = inputs.map((el, k) => (el.value === "" ? NaN : Number(el.value) * (k > 2 ? perUnit() : 1)));
+  const v = inputs.map((el, k) => (k < 3 ? parseLength(el.value) : el.value === "" ? NaN : Number(el.value) * perUnit()));
   const known = v.map((x) => !Number.isNaN(x));
+  // Sides that have something typed in them that isn't a length.
+  const bad = names.filter((n, k) => k < 3 && !known[k] && inputs[k].value.trim() !== "");
   const focus = inputs.indexOf(document.activeElement);
   const count = known.filter(Boolean).length;
   // Keep the URL in step with the inputs so it can be shared.
@@ -328,7 +343,10 @@ function update() {
   msg.textContent = "";
 
   let solutions = null;
-  if (count < 3) {
+  if (bad.length) {
+    msg.className = "error";
+    msg.textContent = `Side ${bad[0]} should be a number or a fraction, like 2.25, 2 1/4, or 5/8.`;
+  } else if (count < 3) {
     msg.textContent = `Enter ${3 - count} more value${count === 2 ? "" : "s"}, including at least one side.`;
   } else {
     try {
