@@ -76,9 +76,12 @@ function solve(s, g) {
 
   // SSA: the angle is opposite one known side; zero, one, or two triangles.
   const i = s.findIndex((x, n) => known(x) && n !== j);
-  const sin = (s[i] * Math.sin(g[j] * RAD)) / s[j];
+  let sin = (s[i] * Math.sin(g[j] * RAD)) / s[j];
   if (sin > 1 + 1e-12) throw new Error("No triangle has these measurements.");
-  const first = Math.asin(Math.min(sin, 1)) / RAD;
+  // asin is so steep near 1 that rounding error would split one right
+  // triangle into two nearly identical ones.
+  if (sin > 1 - 1e-12) sin = 1;
+  const first = Math.asin(sin) / RAD;
   return [first, 180 - first]
     .filter((x, n) => g[j] + x < 180 - 1e-9 && !(n === 1 && Math.abs(x - first) < 1e-9))
     .map((x) => {
