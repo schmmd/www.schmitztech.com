@@ -11,9 +11,14 @@ title: Zangles
   #zangles-out svg { max-width: 30rem; width: 100%; height: auto; display: block; }
   #zangles-msg.error { color: #b00; }
   .zangles-btn { display: inline-flex; align-items: center; gap: 0.3em; }
-  .zangles-ratios { display: flex; flex-direction: column; gap: 0.25rem; max-width: 30rem; }
-  .zangles-ratios button { font: inherit; text-align: left; padding: 0.25rem 0.5rem; background: none; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
-  .zangles-trig button[aria-pressed="true"] { background: #eef3fb; border-color: #1f6fd1; font-weight: bold; }
+  .zangles-trig p button[aria-pressed="true"] { background: #eef3fb; border-color: #1f6fd1; font-weight: bold; }
+  .zangles-ratios { border-collapse: collapse; width: 100%; max-width: 30rem; }
+  .zangles-ratios th, .zangles-ratios td { padding: 0.3rem 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
+  .zangles-ratios .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .zangles-ratios tbody tr { cursor: pointer; }
+  .zangles-ratios tbody tr:hover, .zangles-ratios tr.selected { background: #eef3fb; }
+  .zangles-ratios tr.selected { font-weight: bold; }
+  .zangles-ratios button { font: inherit; padding: 0; background: none; border: none; cursor: pointer; color: inherit; }
 </style>
 
 <p>
@@ -226,19 +231,23 @@ function trigFor(t) {
   const [top, bottom] = RATIOS[trig.fn] || [];
   const hl = trig.fn && { angle, top: side[top], bottom: side[bottom], topRole: top, bottomRole: bottom };
   const angles = acute.map((k) => `<button type="button" data-trig-angle="${k}" aria-pressed="${k === angle}">${names[k + 3]}</button>`).join(" ");
+  // The whole row is clickable; the button inside makes it reachable by keyboard.
   const rows = Object.entries(RATIOS).map(([fn, [top, bottom]]) => {
     const x = t.s[side[top]], y = t.s[side[bottom]];
-    return `<button type="button" data-trig-fn="${fn}" aria-pressed="${fn === trig.fn}">${fn} ${names[angle + 3]} =
-      <span style="color:${TOP}">${ROLES[top]}</span> / <span style="color:${BOTTOM}">${ROLES[bottom]}</span>
-      = ${fmt(x)} / ${fmt(y)} = ${fmt(x / y)}</button>`;
+    return `<tr data-trig-fn="${fn}"${fn === trig.fn ? ' class="selected"' : ""}>
+      <td><button type="button" data-trig-fn="${fn}" aria-pressed="${fn === trig.fn}">${fn} ${names[angle + 3]}</button></td>
+      <td><span style="color:${TOP}">${ROLES[top]}</span> / <span style="color:${BOTTOM}">${ROLES[bottom]}</span></td>
+      <td class="num">${fmt(x)} / ${fmt(y)}</td>
+      <td class="num">${fmt(x / y)}</td></tr>`;
   }).join("");
   return {
     hl,
     html: `<div class="zangles-trig"><h3>Trig ratios</h3>
-      <p>For angle ${angles}. Click a ratio to see its sides on the triangle.
-      Remember <b>SOH CAH TOA</b>: <b>S</b>ine = <b>O</b>pposite / <b>H</b>ypotenuse,
-      <b>C</b>osine = <b>A</b>djacent / <b>H</b>ypotenuse, <b>T</b>angent = <b>O</b>pposite / <b>A</b>djacent.</p>
-      <div class="zangles-ratios">${rows}</div></div>`,
+      <p>For angle ${angles}. Click a ratio to see its sides on the triangle.</p>
+      <table class="zangles-ratios">
+        <thead><tr><th>Ratio</th><th>Formula</th><th class="num">Sides</th><th class="num">Value</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`,
   };
 }
 
