@@ -37,7 +37,10 @@ title: Zangles
     <label>Angle B <input name="B" type="number" step="any" min="0" max="180"></label>
     <label>Angle C <input name="C" type="number" step="any" min="0" max="180"></label>
   </div>
-  <p><button type="reset">Clear</button></p>
+  <p>
+    <button type="reset">Clear</button>
+    <button type="button" id="zangles-copy">Copy link</button>
+  </p>
 </form>
 
 <p id="zangles-msg" role="status"></p>
@@ -245,6 +248,10 @@ function update() {
   const known = v.map((x) => !Number.isNaN(x));
   const focus = inputs.indexOf(document.activeElement);
   const count = known.filter(Boolean).length;
+  // Keep the URL in step with the inputs so it can be shared.
+  const params = new URLSearchParams();
+  names.forEach((n, k) => known[k] && params.set(n, inputs[k].value));
+  history.replaceState(null, "", params.toString() ? `?${params}` : location.pathname);
   inputs.forEach((el) => (el.placeholder = ""));
   msg.className = "";
   msg.textContent = "";
@@ -291,7 +298,19 @@ out.addEventListener("click", (e) => {
   else trig.fn = trig.fn === trigFn ? null : trigFn;
   update();
 });
-// Start with a right angle, the most common case.
-form.elements.A.value = 90;
+const copy = document.getElementById("zangles-copy");
+copy.addEventListener("click", () => {
+  navigator.clipboard.writeText(location.href).then(
+    () => (copy.textContent = "Copied!"),
+    () => (copy.textContent = "Copy the address bar to share")
+  );
+  setTimeout(() => (copy.textContent = "Copy link"), 2000);
+});
+
+// Fill the inputs from the URL, e.g. ?a=3&b=4&C=90. Without any, start with
+// a right angle, the most common case.
+const query = new URLSearchParams(location.search);
+if (names.some((n) => query.has(n))) names.forEach((n) => (form.elements[n].value = query.get(n) ?? ""));
+else form.elements.A.value = 90;
 update();
 </script>
