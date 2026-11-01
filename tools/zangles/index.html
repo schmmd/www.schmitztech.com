@@ -1,0 +1,398 @@
+---
+layout: default
+title: zangles
+---
+
+<style>
+  .zangles-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem 1rem; max-width: 30rem; }
+  .zangles-grid label { display: flex; flex-direction: column; font-weight: bold; }
+  .zangles-grid input { font: inherit; padding: 0.25rem; min-width: 0; }
+  .zangles-grid input:not(:placeholder-shown) { border-color: #286; outline-color: #286; }
+  #zangles-out svg { max-width: 100%; height: auto; display: block; }
+  #zangles-msg.error { color: #b00; }
+  .zangles-btn { display: inline-flex; align-items: center; gap: 0.3em; }
+  /* Big enough to tap on a phone. */
+  #zangles-form button, #zangles-out p button { font: inherit; font-size: 1rem; padding: 0.4rem 0.9rem; min-height: 2.75rem; }
+  .zangles-units label { display: inline-block; padding: 0.4rem 0.3rem; }
+  .zangles-units input { width: 1.1em; height: 1.1em; vertical-align: -0.15em; }
+  .zangles-ratios .short { display: none; }
+  @media (max-width: 480px) {
+    .zangles-ratios .long { display: none; }
+    .zangles-ratios .short { display: inline; }
+  }
+  .zangles-trig p button[aria-pressed="true"] { background: #eef3fb; border-color: #1f6fd1; font-weight: bold; }
+  .zangles-ratios { border-collapse: collapse; width: 100%; max-width: 30rem; }
+  .zangles-ratios th, .zangles-ratios td { padding: 0.3rem 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
+  .zangles-ratios td { white-space: nowrap; }
+  .zangles-ratios .num { font-variant-numeric: tabular-nums; }
+  .zangles-ratios tbody tr { cursor: pointer; }
+  .zangles-ratios tbody tr:hover, .zangles-ratios tr.selected { background: #eef3fb; }
+  .zangles-ratios tr.selected { font-weight: bold; }
+  .zangles-ratios button { font: inherit; padding: 0; background: none; border: none; cursor: pointer; color: inherit; }
+</style>
+
+<p>
+  Enter any three values of a triangle, including at least one side, and
+  Zangles will find the rest. Side <i>a</i> is opposite angle <i>A</i>,
+  <i>b</i> is opposite <i>B</i>, and <i>c</i> is opposite <i>C</i>.
+</p>
+
+<form id="zangles-form">
+  <p class="zangles-units">
+    Angles in
+    <label><input type="radio" name="unit" value="deg" checked> degrees</label>
+    <label><input type="radio" name="unit" value="rad"> radians</label>
+  </p>
+  <div class="zangles-grid">
+    <label>Side a <input name="a" type="number" step="any" min="0"></label>
+    <label>Side b <input name="b" type="number" step="any" min="0"></label>
+    <label>Side c <input name="c" type="number" step="any" min="0"></label>
+    <label>Angle A <input name="A" type="number" step="any" min="0"></label>
+    <label>Angle B <input name="B" type="number" step="any" min="0"></label>
+    <label>Angle C <input name="C" type="number" step="any" min="0"></label>
+  </div>
+  <p>
+    <button type="reset">Clear</button>
+    <button type="button" id="zangles-copy">Copy link</button>
+  </p>
+</form>
+
+<p id="zangles-msg" role="status"></p>
+<div id="zangles-out"></div>
+
+<script>
+const RAD = Math.PI / 180;
+
+// Solve a triangle from sides s=[a,b,c] and angles g=[A,B,C] (degrees), with
+// NaN for unknowns. Returns a list of solutions (SSA can have two).
+function solve(s, g) {
+  const known = (x) => !Number.isNaN(x);
+  const ns = s.filter(known).length, ng = g.filter(known).length;
+  if (ns + ng !== 3) throw new Error("Enter exactly three values.");
+  if (ns === 0) throw new Error("At least one value must be a side.");
+  if (s.some((x) => x <= 0) || g.some((x) => x <= 0 || x >= 180)) {
+    throw new Error("Sides must be positive, and angles must be between 0 and 180° (π radians).");
+  }
+
+  if (ns === 3) return [fromSides(s)];
+
+  if (ng === 2) {
+    const sum = g.filter(known).reduce((x, y) => x + y);
+    if (sum >= 180) throw new Error("The two angles must add up to less than 180° (π radians).");
+    g = g.map((x) => (known(x) ? x : 180 - sum));
+    const i = s.findIndex(known);
+    const k = s[i] / Math.sin(g[i] * RAD);
+    return [{ s: g.map((x) => k * Math.sin(x * RAD)), g }];
+  }
+
+  // Two sides and one angle.
+  const j = g.findIndex(known);
+  if (!known(s[j])) {
+    // SAS: the angle is between the two known sides.
+    const [x, y] = s.filter(known);
+    s = s.slice();
+    s[j] = Math.sqrt(x * x + y * y - 2 * x * y * Math.cos(g[j] * RAD));
+    return [fromSides(s)];
+  }
+
+  // SSA: the angle is opposite one known side; zero, one, or two triangles.
+  const i = s.findIndex((x, n) => known(x) && n !== j);
+  let sin = (s[i] * Math.sin(g[j] * RAD)) / s[j];
+  if (sin > 1 + 1e-12) throw new Error("No triangle has these measurements.");
+  // asin is so steep near 1 that rounding error would split one right
+  // triangle into two nearly identical ones.
+  if (sin > 1 - 1e-12) sin = 1;
+  const first = Math.asin(sin) / RAD;
+  return [first, 180 - first]
+    .filter((x, n) => g[j] + x < 180 - 1e-9 && !(n === 1 && Math.abs(x - first) < 1e-9))
+    .map((x) => {
+      const angles = g.slice();
+      angles[i] = x;
+      const sides = s.slice();
+      const m = 3 - i - j;
+      angles[m] = 180 - g[j] - x;
+      sides[m] = (s[j] / Math.sin(g[j] * RAD)) * Math.sin(angles[m] * RAD);
+      return { s: sides, g: angles };
+    });
+}
+
+function fromSides([a, b, c]) {
+  if (a + b <= c || a + c <= b || b + c <= a) {
+    throw new Error("No triangle has these sides: each side must be shorter than the other two combined.");
+  }
+  const angle = (x, y, z) => Math.acos((y * y + z * z - x * x) / (2 * y * z)) / RAD;
+  return { s: [a, b, c], g: [angle(a, b, c), angle(b, a, c), angle(c, a, b)] };
+}
+
+const fmt = (x) => +x.toFixed(4);
+// Diagram label size and the largest the diagram is shown, in screen pixels.
+const FONT = 14, MAX_WIDTH = 480, MAX_HEIGHT = 360;
+// Loose enough that 1.5708 radians counts as a right angle.
+const isRight = (x) => Math.abs(x - 90) < 1e-3;
+
+const names = ["a", "b", "c", "A", "B", "C"];
+// Shown until there's enough to solve, so you can match it to your problem.
+// It uses any angles entered so far, so a 90° angle looks like one.
+const SAMPLE = fromSides([6, 7, 8]);
+function sample(angles) {
+  const known = angles.filter((x) => !Number.isNaN(x)).length;
+  try {
+    if (known === 1) return solve([6, 7, 8].map((x, k) => (Number.isNaN(angles[k]) ? x : NaN)), angles)[0];
+    if (known === 2) return solve([7, NaN, NaN], angles)[0];
+  } catch {}
+  return SAMPLE;
+}
+// How many times each triangle has been rotated away from its longest side
+// being at the bottom.
+const turns = [0, 0];
+// Whether each triangle is flipped left to right.
+const mirrors = [false, false];
+
+// Draw triangle t. known[k] and focus pick out names[k]; values adds numbers to labels.
+// hl, if set, highlights the sides of a trig ratio instead (see trigFor).
+function draw(t, known, focus, values, turn, mirror, hl) {
+  // Lay side `base` along the x axis and put the opposite vertex above; flip y for SVG.
+  // Start with a right angle in the lower left, since that's how they're
+  // usually drawn. Otherwise start from the longest side, which keeps the
+  // triangle as flat as it can be.
+  const square = t.g.findIndex(isRight);
+  const start = square >= 0 ? (square + 2) % 3 : t.s.indexOf(Math.max(...t.s));
+  const base = (start + turn) % 3;
+  const left = (base + 1) % 3, right = (base + 2) % 3;
+  const pts = [];
+  pts[left] = [0, 0];
+  pts[right] = [t.s[base], 0];
+  pts[base] = [t.s[right] * Math.cos(t.g[left] * RAD), t.s[right] * Math.sin(t.g[left] * RAD)];
+  const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+  const minX = Math.min(...xs), w = Math.max(...xs) - minX, h = Math.max(...ys);
+  const scale = 300 / Math.max(w, h);
+  const P = pts.map(([x, y]) => [(mirror ? w - (x - minX) : x - minX) * scale, (h - y) * scale]);
+  const cx = (P[0][0] + P[1][0] + P[2][0]) / 3, cy = (P[0][1] + P[1][1] + P[2][1]) / 3;
+  const unit = ([x, y]) => { const l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
+  // Anchor text so it grows away from the triangle.
+  const anchor = (dx) => (dx < -0.3 ? "end" : dx > 0.3 ? "start" : "middle");
+  const lit = (k) => hl && [hl.top, hl.bottom, hl.angle + 3].includes(k);
+  const color = (k) => hl
+    ? (k === hl.top ? TOP : k === hl.bottom ? BOTTOM : k === hl.angle + 3 ? THETA : "#bbb")
+    : (k === focus ? "#d60" : known[k] ? "#286" : "#888");
+  const weight = (k) => (hl ? (lit(k) ? 4 : 1.5) : k === focus ? 5 : known[k] ? 3.5 : 1.5);
+  const all = [...t.s, ...t.g];
+  const role = (k) => (!hl ? "" : k === hl.top ? ` (${hl.topRole})` : k === hl.bottom ? ` (${hl.bottomRole})` : "");
+  const label = (k) => names[k] + (values ? ` = ${k > 2 ? angleText(all[k]) : +all[k].toFixed(2)}` : "") + role(k);
+
+  // Lay out the labels at font size F (in viewBox units), tracking the
+  // bounding box of everything drawn so the viewBox can fit it snugly.
+  const render = (F) => {
+    const px = F / FONT; // viewBox units per screen pixel
+    const box = [Math.min(...P.map((p) => p[0])), 0, Math.max(...P.map((p) => p[0])), Math.max(...P.map((p) => p[1]))];
+    // Estimated at half the font size per character.
+    const textWidth = (k) => label(k).length * F * 0.5;
+    // A label's [left, top, right, bottom].
+    const rect = ([x, y, anchor], k) => {
+      const w = textWidth(k), x0 = anchor === "start" ? x : anchor === "end" ? x - w : x - w / 2;
+      return [x0, y - F / 2, x0 + w, y + F / 2];
+    };
+    const overlaps = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+    const text = ([x, y, anchor], k, style) => {
+      const [l, t, r, b] = rect([x, y, anchor], k);
+      box[0] = Math.min(box[0], l); box[2] = Math.max(box[2], r);
+      box[1] = Math.min(box[1], t); box[3] = Math.max(box[3], b);
+      return `<text x="${x}" y="${y}" fill="${color(k)}" font-size="${F}" text-anchor="${anchor}" dominant-baseline="middle" ${style}>${label(k)}</text>`;
+    };
+    // Vertex labels go opposite the middle of their angle, just outside the
+    // triangle. Place them first so side labels can steer clear of them.
+    const corners = [0, 1, 2].map((k) => {
+      const V = P[k], toward = (Q) => unit([Q[0] - V[0], Q[1] - V[1]]);
+      const u = toward(P[(k + 1) % 3]), v = toward(P[(k + 2) % 3]);
+      const [bx, by] = unit([-u[0] - v[0], -u[1] - v[1]]);
+      return [V[0] + bx * F, V[1] + by * F, anchor(bx)];
+    });
+    const cornerRects = corners.map((c, k) => rect(c, k + 3));
+    let svg = `<polygon points="${P.map((p) => p.join(",")).join(" ")}" fill="#2861" stroke="none"/>`;
+    for (let k = 0; k < 3; k++) {
+      // Side k runs between the two vertices other than k.
+      const p = P[(k + 1) % 3], q = P[(k + 2) % 3];
+      svg += `<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="${color(k)}" stroke-width="${weight(k) * px}" stroke-linecap="round"/>`;
+      // Label it off the middle of the edge, perpendicular and away from the triangle.
+      const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
+      let [nx, ny] = unit([q[1] - p[1], p[0] - q[0]]);
+      if (nx * (mx - cx) + ny * (my - cy) < 0) [nx, ny] = [-nx, -ny];
+      // Push the label's center out far enough that its whole box clears a
+      // sloped edge.
+      // On a short side, keep going until it clears the corner labels.
+      let d = 6 * px + (textWidth(k) / 2) * Math.abs(nx) + (F / 2) * Math.abs(ny);
+      for (let i = 0; i < 20 && cornerRects.some((c) => overlaps(c, rect([mx + nx * d, my + ny * d, "middle"], k))); i++) d += F / 2;
+      svg += text([mx + nx * d, my + ny * d, "middle"], k, 'font-style="italic"');
+
+      // Angle k: an arc (or a square for 90°) at vertex k.
+      const V = P[k];
+      const u = unit([p[0] - V[0], p[1] - V[1]]), v = unit([q[0] - V[0], q[1] - V[1]]);
+      const r = Math.min(24 * px, 0.3 * Math.min(Math.hypot(p[0] - V[0], p[1] - V[1]), Math.hypot(q[0] - V[0], q[1] - V[1])));
+      const s = () => `stroke="${color(k + 3)}" stroke-width="${weight(k + 3) * 0.7 * px}" fill="none"`;
+      if (isRight(t.g[k])) {
+        const m = r * 0.6;
+        svg += `<path d="M${V[0] + u[0] * m},${V[1] + u[1] * m} l${v[0] * m},${v[1] * m} l${-u[0] * m},${-u[1] * m}" ${s()}/>`;
+      } else {
+        const sweep = u[0] * v[1] - u[1] * v[0] > 0 ? 1 : 0;
+        svg += `<path d="M${V[0] + u[0] * r},${V[1] + u[1] * r} A${r},${r} 0 0 ${sweep} ${V[0] + v[0] * r},${V[1] + v[1] * r}" ${s()}/>`;
+      }
+      svg += text(corners[k], k + 3, 'font-weight="bold"');
+    }
+    return { svg, box };
+  };
+
+  // Show the drawing as big as fits the page width and MAX_HEIGHT, with labels
+  // at FONT pixels. Label size changes the bounding box, so iterate to settle.
+  const maxWidth = Math.min(out.clientWidth || MAX_WIDTH, MAX_WIDTH);
+  let F = FONT, layout, zoom;
+  for (let i = 0; i < 8; i++) {
+    layout = render(F);
+    const [x0, y0, x1, y1] = layout.box;
+    zoom = Math.min(maxWidth / (x1 - x0 + F), MAX_HEIGHT / (y1 - y0 + F)); // screen pixels per unit
+    F = FONT / zoom;
+  }
+  const [x0, y0, x1, y1] = layout.box, vw = x1 - x0 + F, vh = y1 - y0 + F;
+  return `<svg viewBox="${x0 - F / 2} ${y0 - F / 2} ${vw} ${vh}" width="${vw * zoom}" height="${vh * zoom}" role="img" aria-label="Triangle diagram">${layout.svg}</svg>`;
+}
+
+const form = document.getElementById("zangles-form");
+const out = document.getElementById("zangles-out");
+const msg = document.getElementById("zangles-msg");
+
+const icon = (paths) =>
+  `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+const buttons = (n) => `<p>
+  <button type="button" class="zangles-btn" data-rotate="${n}">${icon('<path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>')}Rotate</button>
+  <button type="button" class="zangles-btn" data-mirror="${n}">${icon('<path d="M10 6 3 18h7z"/><path d="M14 6l7 12h-7z"/><path d="M12 2v20" stroke-width="1.5" stroke-dasharray="2 2"/>')}Mirror</button>
+</p>`;
+
+const TOP = "#1f6fd1", BOTTOM = "#9b3fc0", THETA = "#c0392b";
+const ROLES = { opp: "opposite", adj: "adjacent", hyp: "hypotenuse" };
+// Each ratio as [numerator, denominator].
+const RATIOS = { sin: ["opp", "hyp"], cos: ["adj", "hyp"], tan: ["opp", "adj"], csc: ["hyp", "opp"], sec: ["hyp", "adj"], cot: ["adj", "opp"] };
+// The chosen acute angle (a vertex index) and the ratio whose sides are highlighted.
+const trig = { angle: null, fn: null };
+
+// For a right triangle, a panel of trig ratios for one acute angle, plus what
+// to highlight on the drawing. Null if t has no right angle.
+function trigFor(t) {
+  const square = t.g.findIndex(isRight);
+  if (square < 0) return null;
+  const acute = [0, 1, 2].filter((k) => k !== square);
+  const angle = acute.includes(trig.angle) ? trig.angle : acute[0];
+  const side = { opp: angle, hyp: square, adj: 3 - angle - square };
+  const [top, bottom] = RATIOS[trig.fn] || [];
+  const hl = trig.fn && { angle, top: side[top], bottom: side[bottom], topRole: top, bottomRole: bottom };
+  const angles = acute.map((k) => `<button type="button" data-trig-angle="${k}" aria-pressed="${k === angle}">${names[k + 3]}</button>`).join(" ");
+  // Full names, or abbreviations on narrow screens.
+  const role = (r) => `<span class="long">${ROLES[r]}</span><span class="short">${r}</span>`;
+  // The whole row is clickable; the button inside makes it reachable by keyboard.
+  const rows = Object.entries(RATIOS).map(([fn, [top, bottom]]) => {
+    const x = t.s[side[top]], y = t.s[side[bottom]];
+    return `<tr data-trig-fn="${fn}"${fn === trig.fn ? ' class="selected"' : ""}>
+      <td><button type="button" data-trig-fn="${fn}" aria-pressed="${fn === trig.fn}">${fn} ${names[angle + 3]}</button></td>
+      <td><span style="color:${TOP}">${role(top)}</span> / <span style="color:${BOTTOM}">${role(bottom)}</span></td>
+      <td class="num">${fmt(x)} / ${fmt(y)}</td>
+      <td class="num">${fmt(x / y)}</td></tr>`;
+  }).join("");
+  return {
+    hl,
+    html: `<div class="zangles-trig"><h3>Trig ratios</h3>
+      <p>For angle ${angles}. Click a ratio to see its sides on the triangle.</p>
+      <table class="zangles-ratios">
+        <thead><tr><th>Ratio</th><th>Formula</th><th class="num">Sides</th><th class="num">Value</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`,
+  };
+}
+
+const radians = () => form.elements.unit.value === "rad";
+// Degrees in one of the chosen angle unit.
+const perUnit = () => (radians() ? 1 / RAD : 1);
+const angleText = (deg) => (radians() ? `${+(deg * RAD).toFixed(4)} rad` : `${+deg.toFixed(2)}°`);
+
+function update() {
+  const inputs = names.map((n) => form.elements[n]);
+  // Everything below works in degrees.
+  const v = inputs.map((el, k) => (el.value === "" ? NaN : Number(el.value) * (k > 2 ? perUnit() : 1)));
+  const known = v.map((x) => !Number.isNaN(x));
+  const focus = inputs.indexOf(document.activeElement);
+  const count = known.filter(Boolean).length;
+  // Keep the URL in step with the inputs so it can be shared.
+  const params = new URLSearchParams();
+  names.forEach((n, k) => known[k] && params.set(n, inputs[k].value));
+  if (radians()) params.set("unit", "rad");
+  history.replaceState(null, "", params.toString() ? `?${params}` : location.pathname);
+  inputs.forEach((el) => (el.placeholder = ""));
+  msg.className = "";
+  msg.textContent = "";
+
+  let solutions = null;
+  if (count < 3) {
+    msg.textContent = `Enter ${3 - count} more value${count === 2 ? "" : "s"}, including at least one side.`;
+  } else {
+    try {
+      solutions = solve(v.slice(0, 3), v.slice(3));
+    } catch (ex) {
+      msg.className = "error";
+      msg.textContent = ex.message;
+    }
+  }
+  if (!solutions) {
+    out.innerHTML = draw(sample(v.slice(3)), known, focus, false, turns[0], mirrors[0]) + buttons(0);
+    return;
+  }
+
+  // Show the calculated values greyed out in the empty boxes.
+  const first = [...solutions[0].s, ...solutions[0].g];
+  inputs.forEach((el, k) => { if (!known[k]) el.placeholder = fmt(k > 2 ? first[k] / perUnit() : first[k]); });
+  if (solutions.length > 1) msg.textContent = "Two triangles fit these measurements:";
+  out.innerHTML = solutions.map((t, n) => {
+    const area = 0.5 * t.s[1] * t.s[2] * Math.sin(t.g[0] * RAD);
+    const ratios = trigFor(t);
+    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true, turns[n], mirrors[n], ratios?.hl)}${buttons(n)}${ratios ? ratios.html : ""}`;
+  }).join("");
+}
+
+form.addEventListener("input", (e) => e.target.name !== "unit" && update());
+// Switching units converts the angles already entered, so the triangle stays put.
+form.addEventListener("change", (e) => {
+  if (e.target.name !== "unit") return;
+  const factor = radians() ? RAD : 1 / RAD;
+  for (const n of ["A", "B", "C"]) {
+    const el = form.elements[n];
+    if (el.value !== "") el.value = +(Number(el.value) * factor).toFixed(radians() ? 6 : 4);
+  }
+  update();
+});
+form.addEventListener("focusin", update);
+form.addEventListener("focusout", () => setTimeout(update));
+form.addEventListener("submit", (e) => e.preventDefault());
+form.addEventListener("reset", () => setTimeout(update));
+out.addEventListener("click", (e) => {
+  const button = e.target.closest("[data-rotate], [data-mirror], [data-trig-angle], [data-trig-fn]");
+  if (!button) return;
+  const { rotate, mirror, trigAngle, trigFn } = button.dataset;
+  if (rotate !== undefined) turns[rotate] = (turns[rotate] + 1) % 3;
+  else if (mirror !== undefined) mirrors[mirror] = !mirrors[mirror];
+  else if (trigAngle !== undefined) trig.angle = Number(trigAngle);
+  else trig.fn = trig.fn === trigFn ? null : trigFn;
+  update();
+});
+const copy = document.getElementById("zangles-copy");
+copy.addEventListener("click", () => {
+  navigator.clipboard.writeText(location.href).then(
+    () => (copy.textContent = "Copied!"),
+    () => (copy.textContent = "Copy the address bar to share")
+  );
+  setTimeout(() => (copy.textContent = "Copy link"), 2000);
+});
+
+// Fill the inputs from the URL, e.g. ?a=3&b=4&C=90. Without any, start with
+// a right angle, the most common case.
+const query = new URLSearchParams(location.search);
+if (query.get("unit") === "rad") form.elements.unit.value = "rad";
+if (names.some((n) => query.has(n))) names.forEach((n) => (form.elements[n].value = query.get(n) ?? ""));
+else form.elements.A.value = radians() ? 1.570796 : 90;
+update();
+</script>
