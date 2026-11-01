@@ -108,12 +108,17 @@ const fmt = (x) => +x.toFixed(4);
 const names = ["a", "b", "c", "A", "B", "C"];
 // Shown until there's enough to solve, so you can match it to your problem.
 const SAMPLE = fromSides([6, 7, 8]);
+// Which side is drawn along the bottom of each triangle; Rotate cycles it.
+const bases = [2, 2];
 
 // Draw triangle t. known[k] and focus pick out names[k]; values adds numbers to labels.
-function draw(t, known, focus, values) {
-  const [a, b, c] = t.s, A = t.g[0];
-  // A at the origin, B along the x axis, C above; flip y for SVG.
-  const pts = [[0, 0], [c, 0], [b * Math.cos(A * RAD), b * Math.sin(A * RAD)]];
+function draw(t, known, focus, values, base) {
+  // Lay side `base` along the x axis and put the opposite vertex above; flip y for SVG.
+  const left = (base + 1) % 3, right = (base + 2) % 3;
+  const pts = [];
+  pts[left] = [0, 0];
+  pts[right] = [t.s[base], 0];
+  pts[base] = [t.s[right] * Math.cos(t.g[left] * RAD), t.s[right] * Math.sin(t.g[left] * RAD)];
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
   const minX = Math.min(...xs), w = Math.max(...xs) - minX, h = Math.max(...ys);
   const scale = 300 / Math.max(w, h), padX = 100, padY = 40;
@@ -164,6 +169,8 @@ const form = document.getElementById("zangles-form");
 const out = document.getElementById("zangles-out");
 const msg = document.getElementById("zangles-msg");
 
+const rotate = (n) => `<p><button type="button" data-rotate="${n}">Rotate</button></p>`;
+
 function update() {
   const inputs = names.map((n) => form.elements[n]);
   const v = inputs.map((el) => (el.value === "" ? NaN : Number(el.value)));
@@ -186,7 +193,7 @@ function update() {
     }
   }
   if (!solutions) {
-    out.innerHTML = draw(SAMPLE, known, focus, false);
+    out.innerHTML = draw(SAMPLE, known, focus, false, bases[0]) + rotate(0);
     return;
   }
 
@@ -196,7 +203,7 @@ function update() {
   if (solutions.length > 1) msg.textContent = "Two triangles fit these measurements:";
   out.innerHTML = solutions.map((t, n) => {
     const area = 0.5 * t.s[1] * t.s[2] * Math.sin(t.g[0] * RAD);
-    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true)}`;
+    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true, bases[n])}${rotate(n)}`;
   }).join("");
 }
 
@@ -205,5 +212,11 @@ form.addEventListener("focusin", update);
 form.addEventListener("focusout", () => setTimeout(update));
 form.addEventListener("submit", (e) => e.preventDefault());
 form.addEventListener("reset", () => setTimeout(update));
+out.addEventListener("click", (e) => {
+  const n = e.target.dataset.rotate;
+  if (n === undefined) return;
+  bases[n] = (bases[n] + 1) % 3;
+  update();
+});
 update();
 </script>
