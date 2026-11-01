@@ -1,0 +1,180 @@
+---
+layout: default
+title: Zangles
+---
+
+<style>
+  .zangles-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem 1rem; max-width: 30rem; }
+  .zangles-grid label { display: flex; flex-direction: column; font-weight: bold; }
+  .zangles-grid input { font: inherit; padding: 0.25rem; min-width: 0; }
+  .zangles-grid input.computed { background: #eef7ee; }
+  #zangles-out svg { max-width: 30rem; width: 100%; height: auto; }
+  #zangles-error { color: #b00; }
+</style>
+
+<p>
+  Enter any three values of a triangle, including at least one side, and
+  Zangles will find the rest. Side <i>a</i> is opposite angle <i>A</i>,
+  <i>b</i> is opposite <i>B</i>, and <i>c</i> is opposite <i>C</i>.
+  Angles are in degrees. For a right triangle, set one angle to 90.
+</p>
+
+<form id="zangles-form">
+  <div class="zangles-grid">
+    <label>Side a <input name="a" type="number" step="any" min="0"></label>
+    <label>Side b <input name="b" type="number" step="any" min="0"></label>
+    <label>Side c <input name="c" type="number" step="any" min="0"></label>
+    <label>Angle A <input name="A" type="number" step="any" min="0" max="180"></label>
+    <label>Angle B <input name="B" type="number" step="any" min="0" max="180"></label>
+    <label>Angle C <input name="C" type="number" step="any" min="0" max="180"></label>
+  </div>
+  <p>
+    <button type="submit">Solve</button>
+    <button type="reset">Clear</button>
+  </p>
+</form>
+
+<p id="zangles-error" role="alert"></p>
+<div id="zangles-out"></div>
+
+<script>
+const RAD = Math.PI / 180;
+
+// Solve a triangle from sides s=[a,b,c] and angles g=[A,B,C] (degrees), with
+// NaN for unknowns. Returns a list of solutions (SSA can have two).
+function solve(s, g) {
+  const known = (x) => !Number.isNaN(x);
+  const ns = s.filter(known).length, ng = g.filter(known).length;
+  if (ns + ng !== 3) throw new Error("Enter exactly three values.");
+  if (ns === 0) throw new Error("At least one value must be a side.");
+  if (s.some((x) => x <= 0) || g.some((x) => x <= 0 || x >= 180)) {
+    throw new Error("Sides must be positive and angles between 0 and 180.");
+  }
+
+  if (ns === 3) return [fromSides(s)];
+
+  if (ng === 2) {
+    const sum = g.filter(known).reduce((x, y) => x + y);
+    if (sum >= 180) throw new Error("The two angles must add up to less than 180.");
+    g = g.map((x) => (known(x) ? x : 180 - sum));
+    const i = s.findIndex(known);
+    const k = s[i] / Math.sin(g[i] * RAD);
+    return [{ s: g.map((x) => k * Math.sin(x * RAD)), g }];
+  }
+
+  // Two sides and one angle.
+  const j = g.findIndex(known);
+  if (!known(s[j])) {
+    // SAS: the angle is between the two known sides.
+    const [x, y] = s.filter(known);
+    s = s.slice();
+    s[j] = Math.sqrt(x * x + y * y - 2 * x * y * Math.cos(g[j] * RAD));
+    return [fromSides(s)];
+  }
+
+  // SSA: the angle is opposite one known side; zero, one, or two triangles.
+  const i = s.findIndex((x, n) => known(x) && n !== j);
+  const sin = (s[i] * Math.sin(g[j] * RAD)) / s[j];
+  if (sin > 1 + 1e-12) throw new Error("No triangle has these measurements.");
+  const first = Math.asin(Math.min(sin, 1)) / RAD;
+  return [first, 180 - first]
+    .filter((x, n) => g[j] + x < 180 - 1e-9 && !(n === 1 && Math.abs(x - first) < 1e-9))
+    .map((x) => {
+      const angles = g.slice();
+      angles[i] = x;
+      const sides = s.slice();
+      const m = 3 - i - j;
+      angles[m] = 180 - g[j] - x;
+      sides[m] = (s[j] / Math.sin(g[j] * RAD)) * Math.sin(angles[m] * RAD);
+      return { s: sides, g: angles };
+    });
+}
+
+function fromSides([a, b, c]) {
+  if (a + b <= c || a + c <= b || b + c <= a) {
+    throw new Error("No triangle has these sides: each side must be shorter than the other two combined.");
+  }
+  const angle = (x, y, z) => Math.acos((y * y + z * z - x * x) / (2 * y * z)) / RAD;
+  return { s: [a, b, c], g: [angle(a, b, c), angle(b, a, c), angle(c, a, b)] };
+}
+
+const fmt = (x) => +x.toFixed(4);
+
+function draw({ s: [a, b, c], g: [A] }) {
+  // A at the origin, B along the x axis, C above; flip y for SVG.
+  const pts = [[0, 0], [c, 0], [b * Math.cos(A * RAD), b * Math.sin(A * RAD)]];
+  const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+  const minX = Math.min(...xs), w = Math.max(...xs) - minX, h = Math.max(...ys);
+  const scale = 260 / Math.max(w, h), pad = 30;
+  const P = pts.map(([x, y]) => [pad + (x - minX) * scale, pad + (h - y) * scale]);
+  const cx = (P[0][0] + P[1][0] + P[2][0]) / 3, cy = (P[0][1] + P[1][1] + P[2][1]) / 3;
+  // Push a label away from the centroid.
+  const away = ([x, y], d) => {
+    const dx = x - cx, dy = y - cy, l = Math.hypot(dx, dy) || 1;
+    return [x + (dx / l) * d, y + (dy / l) * d];
+  };
+  const text = ([x, y], t, style) =>
+    `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" ${style}>${t}</text>`;
+  const mid = (p, q) => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+  const labels = [
+    text(away(P[0], 14), "A", 'font-weight="bold"'),
+    text(away(P[1], 14), "B", 'font-weight="bold"'),
+    text(away(P[2], 14), "C", 'font-weight="bold"'),
+    text(away(mid(P[1], P[2]), 12), "a", 'font-style="italic"'),
+    text(away(mid(P[0], P[2]), 12), "b", 'font-style="italic"'),
+    text(away(mid(P[0], P[1]), 12), "c", 'font-style="italic"'),
+  ];
+  return `<svg viewBox="0 0 ${w * scale + 2 * pad} ${h * scale + 2 * pad}" role="img" aria-label="Triangle diagram">
+    <polygon points="${P.map((p) => p.join(",")).join(" ")}" fill="#eef7ee" stroke="currentColor" stroke-width="2"/>
+    ${labels.join("")}</svg>`;
+}
+
+const form = document.getElementById("zangles-form");
+const out = document.getElementById("zangles-out");
+const err = document.getElementById("zangles-error");
+const names = ["a", "b", "c", "A", "B", "C"];
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  err.textContent = "";
+  out.innerHTML = "";
+  const inputs = names.map((n) => form.elements[n]);
+  inputs.forEach((el) => el.classList.contains("computed") && ((el.value = ""), el.classList.remove("computed")));
+  const v = inputs.map((el) => (el.value === "" ? NaN : Number(el.value)));
+  let solutions;
+  try {
+    solutions = solve(v.slice(0, 3), v.slice(3));
+  } catch (ex) {
+    err.textContent = ex.message;
+    return;
+  }
+  // Fill the form with the first solution.
+  const first = [...solutions[0].s, ...solutions[0].g];
+  inputs.forEach((el, n) => {
+    if (Number.isNaN(v[n])) {
+      el.value = fmt(first[n]);
+      el.classList.add("computed");
+    }
+  });
+  if (solutions.length > 1) {
+    out.insertAdjacentHTML("beforeend", "<p>Two triangles fit these measurements:</p>");
+  }
+  solutions.forEach((t, n) => {
+    const area = 0.5 * t.s[1] * t.s[2] * Math.sin(t.g[0] * RAD);
+    const list = names.map((name, k) => `${name} = ${fmt([...t.s, ...t.g][k])}${k > 2 ? "°" : ""}`).join(", ");
+    out.insertAdjacentHTML(
+      "beforeend",
+      `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>${list}<br>Area = ${fmt(area)}</p>${draw(t)}`
+    );
+  });
+});
+
+// Once edited, a computed value becomes an input.
+form.addEventListener("input", (e) => e.target.classList.remove("computed"));
+
+form.addEventListener("reset", () => {
+  err.textContent = "";
+  out.innerHTML = "";
+  names.forEach((n) => form.elements[n].classList.remove("computed"));
+});
+</script>
