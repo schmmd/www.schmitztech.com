@@ -162,7 +162,10 @@ function draw(t, known, focus, values, turn, mirror) {
     const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
     let [nx, ny] = unit([q[1] - p[1], p[0] - q[0]]);
     if (nx * (mx - cx) + ny * (my - cy) < 0) [nx, ny] = [-nx, -ny];
-    svg += text([mx + nx * 10, my + ny * 10, anchor(nx)], k, 'font-style="italic"');
+    // Push the label's center out far enough that its whole box clears a
+    // sloped edge. Width is estimated at ~7.5px per character of 15px text.
+    const d = 6 + (label(k).length * 7.5 / 2) * Math.abs(nx) + 7.5 * Math.abs(ny);
+    svg += text([mx + nx * d, my + ny * d, "middle"], k, 'font-style="italic"');
 
     // Angle k: an arc (or a square for 90°) at vertex k.
     const V = P[k];
