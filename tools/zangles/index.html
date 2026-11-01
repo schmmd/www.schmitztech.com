@@ -10,6 +10,7 @@ title: Zangles
   .zangles-grid input:not(:placeholder-shown) { border-color: #286; outline-color: #286; }
   #zangles-out svg { max-width: 30rem; width: 100%; height: auto; display: block; }
   #zangles-msg.error { color: #b00; }
+  .zangles-btn { display: inline-flex; align-items: center; gap: 0.3em; }
 </style>
 
 <p>
@@ -107,13 +108,24 @@ const fmt = (x) => +x.toFixed(4);
 
 const names = ["a", "b", "c", "A", "B", "C"];
 // Shown until there's enough to solve, so you can match it to your problem.
+// It uses any angles entered so far, so a 90° angle looks like one.
 const SAMPLE = fromSides([6, 7, 8]);
+function sample(angles) {
+  const known = angles.filter((x) => !Number.isNaN(x)).length;
+  try {
+    if (known === 1) return solve([6, 7, 8].map((x, k) => (Number.isNaN(angles[k]) ? x : NaN)), angles)[0];
+    if (known === 2) return solve([7, NaN, NaN], angles)[0];
+  } catch {}
+  return SAMPLE;
+}
 // How many times each triangle has been rotated away from its longest side
 // being at the bottom.
 const turns = [0, 0];
+// Whether each triangle is flipped left to right.
+const mirrors = [false, false];
 
 // Draw triangle t. known[k] and focus pick out names[k]; values adds numbers to labels.
-function draw(t, known, focus, values, turn) {
+function draw(t, known, focus, values, turn, mirror) {
   // Lay side `base` along the x axis and put the opposite vertex above; flip y for SVG.
   // Starting from the longest side keeps the triangle as flat as it can be.
   const base = (t.s.indexOf(Math.max(...t.s)) + turn) % 3;
@@ -125,7 +137,7 @@ function draw(t, known, focus, values, turn) {
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
   const minX = Math.min(...xs), w = Math.max(...xs) - minX, h = Math.max(...ys);
   const scale = 300 / Math.max(w, h), padX = 100, padY = 40;
-  const P = pts.map(([x, y]) => [padX + (x - minX) * scale, padY + (h - y) * scale]);
+  const P = pts.map(([x, y]) => [padX + (mirror ? w - (x - minX) : x - minX) * scale, padY + (h - y) * scale]);
   const cx = (P[0][0] + P[1][0] + P[2][0]) / 3, cy = (P[0][1] + P[1][1] + P[2][1]) / 3;
   const unit = ([x, y]) => { const l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
   // Anchor text so it grows away from the triangle.
@@ -171,10 +183,12 @@ const form = document.getElementById("zangles-form");
 const out = document.getElementById("zangles-out");
 const msg = document.getElementById("zangles-msg");
 
-const rotate = (n) => `<p><button type="button" data-rotate="${n}" style="display: inline-flex; align-items: center; gap: 0.3em">
-  <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>
-  </svg>Rotate</button></p>`;
+const icon = (paths) =>
+  `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+const buttons = (n) => `<p>
+  <button type="button" class="zangles-btn" data-rotate="${n}">${icon('<path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>')}Rotate</button>
+  <button type="button" class="zangles-btn" data-mirror="${n}">${icon('<path d="M10 6 3 18h7z"/><path d="M14 6l7 12h-7z"/><path d="M12 2v20" stroke-width="1.5" stroke-dasharray="2 2"/>')}Mirror</button>
+</p>`;
 
 function update() {
   const inputs = names.map((n) => form.elements[n]);
@@ -198,7 +212,7 @@ function update() {
     }
   }
   if (!solutions) {
-    out.innerHTML = draw(SAMPLE, known, focus, false, turns[0]) + rotate(0);
+    out.innerHTML = draw(sample(v.slice(3)), known, focus, false, turns[0], mirrors[0]) + buttons(0);
     return;
   }
 
@@ -208,7 +222,7 @@ function update() {
   if (solutions.length > 1) msg.textContent = "Two triangles fit these measurements:";
   out.innerHTML = solutions.map((t, n) => {
     const area = 0.5 * t.s[1] * t.s[2] * Math.sin(t.g[0] * RAD);
-    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true, turns[n])}${rotate(n)}`;
+    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true, turns[n], mirrors[n])}${buttons(n)}`;
   }).join("");
 }
 
@@ -218,10 +232,14 @@ form.addEventListener("focusout", () => setTimeout(update));
 form.addEventListener("submit", (e) => e.preventDefault());
 form.addEventListener("reset", () => setTimeout(update));
 out.addEventListener("click", (e) => {
-  const n = e.target.closest("[data-rotate]")?.dataset.rotate;
-  if (n === undefined) return;
-  turns[n] = (turns[n] + 1) % 3;
+  const button = e.target.closest("[data-rotate], [data-mirror]");
+  if (!button) return;
+  const { rotate, mirror } = button.dataset;
+  if (rotate !== undefined) turns[rotate] = (turns[rotate] + 1) % 3;
+  else mirrors[mirror] = !mirrors[mirror];
   update();
 });
+// Start with a right angle, the most common case.
+form.elements.A.value = 90;
 update();
 </script>
