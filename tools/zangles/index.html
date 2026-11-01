@@ -15,6 +15,10 @@ title: zangles
   #zangles-form button, #zangles-out p button { font: inherit; font-size: 1rem; padding: 0.4rem 0.9rem; min-height: 2.75rem; }
   .zangles-units label { display: inline-block; padding: 0.4rem 0.3rem; }
   .zangles-units input { width: 1.1em; height: 1.1em; vertical-align: -0.15em; }
+  /* Phone number pads have no slash or space key, so offer fractions to tap. */
+  .zangles-chips { display: none; flex-wrap: wrap; gap: 0.4rem; align-items: center; max-width: 30rem; }
+  @media (pointer: coarse) { .zangles-chips { display: flex; } }
+  #zangles-form .zangles-chips button { min-width: 2.75rem; padding: 0.4rem 0.5rem; touch-action: manipulation; }
   .zangles-ratios .short { display: none; }
   @media (max-width: 480px) {
     .zangles-ratios .long { display: none; }
@@ -45,13 +49,24 @@ title: zangles
     <label><input type="radio" name="unit" value="rad"> radians</label>
   </p>
   <div class="zangles-grid">
-    <label>Side a <input name="a" type="text" autocomplete="off" spellcheck="false"></label>
-    <label>Side b <input name="b" type="text" autocomplete="off" spellcheck="false"></label>
-    <label>Side c <input name="c" type="text" autocomplete="off" spellcheck="false"></label>
+    <label>Side a <input name="a" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></label>
+    <label>Side b <input name="b" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></label>
+    <label>Side c <input name="c" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></label>
     <label>Angle A <input name="A" type="number" step="any" min="0"></label>
     <label>Angle B <input name="B" type="number" step="any" min="0"></label>
     <label>Angle C <input name="C" type="number" step="any" min="0"></label>
   </div>
+  <p class="zangles-chips" id="zangles-chips" aria-label="Fractions to add to a side">
+    <button type="button" data-insert="⅛">⅛</button>
+    <button type="button" data-insert="¼">¼</button>
+    <button type="button" data-insert="⅜">⅜</button>
+    <button type="button" data-insert="½">½</button>
+    <button type="button" data-insert="⅝">⅝</button>
+    <button type="button" data-insert="¾">¾</button>
+    <button type="button" data-insert="⅞">⅞</button>
+    <button type="button" data-insert="/">/</button>
+    <button type="button" data-insert=" " aria-label="space">space</button>
+  </p>
   <p>
     <button type="reset">Clear</button>
     <button type="button" id="zangles-copy">Copy link</button>
@@ -386,6 +401,21 @@ form.addEventListener("change", (e) => {
 form.addEventListener("focusin", update);
 form.addEventListener("focusout", () => setTimeout(update));
 form.addEventListener("submit", (e) => e.preventDefault());
+
+// The fraction chips type into the side that was last being edited, so the
+// number pad can stay up on a phone.
+const chips = document.getElementById("zangles-chips");
+let side = form.elements.a;
+form.addEventListener("focusin", (e) => { if (["a", "b", "c"].includes(e.target.name)) side = e.target; });
+// Don't take focus from the input, which would dismiss its keyboard.
+chips.addEventListener("pointerdown", (e) => e.target.closest("button") && e.preventDefault());
+chips.addEventListener("click", (e) => {
+  const button = e.target.closest("button");
+  if (!button) return;
+  side.focus();
+  side.setRangeText(button.dataset.insert, side.selectionStart, side.selectionEnd, "end");
+  update();
+});
 form.addEventListener("reset", () => setTimeout(update));
 out.addEventListener("click", (e) => {
   const button = e.target.closest("[data-rotate], [data-mirror], [data-trig-angle], [data-trig-fn]");
