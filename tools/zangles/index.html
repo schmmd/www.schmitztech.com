@@ -7,9 +7,9 @@ title: Zangles
   .zangles-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem 1rem; max-width: 30rem; }
   .zangles-grid label { display: flex; flex-direction: column; font-weight: bold; }
   .zangles-grid input { font: inherit; padding: 0.25rem; min-width: 0; }
-  .zangles-grid input.computed { background: #eef7ee; }
-  #zangles-out svg { max-width: 30rem; width: 100%; height: auto; }
-  #zangles-error { color: #b00; }
+  .zangles-grid input:not(:placeholder-shown) { border-color: #286; outline-color: #286; }
+  #zangles-out svg { max-width: 30rem; width: 100%; height: auto; display: block; }
+  #zangles-msg.error { color: #b00; }
 </style>
 
 <p>
@@ -17,6 +17,11 @@ title: Zangles
   Zangles will find the rest. Side <i>a</i> is opposite angle <i>A</i>,
   <i>b</i> is opposite <i>B</i>, and <i>c</i> is opposite <i>C</i>.
   Angles are in degrees. For a right triangle, set one angle to 90.
+</p>
+<p>
+  The drawing shows the values you entered in <b style="color:#286">green</b>
+  and the box you're typing in in <b style="color:#d60">orange</b>. Once there
+  is enough to solve, it redraws to the real shape.
 </p>
 
 <form id="zangles-form">
@@ -28,13 +33,10 @@ title: Zangles
     <label>Angle B <input name="B" type="number" step="any" min="0" max="180"></label>
     <label>Angle C <input name="C" type="number" step="any" min="0" max="180"></label>
   </div>
-  <p>
-    <button type="submit">Solve</button>
-    <button type="reset">Clear</button>
-  </p>
+  <p><button type="reset">Clear</button></p>
 </form>
 
-<p id="zangles-error" role="alert"></p>
+<p id="zangles-msg" role="status"></p>
 <div id="zangles-out"></div>
 
 <script>
@@ -100,81 +102,105 @@ function fromSides([a, b, c]) {
 
 const fmt = (x) => +x.toFixed(4);
 
-function draw({ s: [a, b, c], g: [A] }) {
+const names = ["a", "b", "c", "A", "B", "C"];
+// Shown until there's enough to solve, so you can match it to your problem.
+const SAMPLE = fromSides([6, 7, 8]);
+
+// Draw triangle t. known[k] and focus pick out names[k]; values adds numbers to labels.
+function draw(t, known, focus, values) {
+  const [a, b, c] = t.s, A = t.g[0];
   // A at the origin, B along the x axis, C above; flip y for SVG.
   const pts = [[0, 0], [c, 0], [b * Math.cos(A * RAD), b * Math.sin(A * RAD)]];
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
   const minX = Math.min(...xs), w = Math.max(...xs) - minX, h = Math.max(...ys);
-  const scale = 260 / Math.max(w, h), pad = 30;
-  const P = pts.map(([x, y]) => [pad + (x - minX) * scale, pad + (h - y) * scale]);
+  const scale = 300 / Math.max(w, h), padX = 100, padY = 40;
+  const P = pts.map(([x, y]) => [padX + (x - minX) * scale, padY + (h - y) * scale]);
   const cx = (P[0][0] + P[1][0] + P[2][0]) / 3, cy = (P[0][1] + P[1][1] + P[2][1]) / 3;
-  // Push a label away from the centroid.
+  const unit = ([x, y]) => { const l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
+  // Push a point away from the centroid, anchoring text so it grows outward.
   const away = ([x, y], d) => {
-    const dx = x - cx, dy = y - cy, l = Math.hypot(dx, dy) || 1;
-    return [x + (dx / l) * d, y + (dy / l) * d];
+    const [ux, uy] = unit([x - cx, y - cy]);
+    return [x + ux * d, y + uy * d, ux < -0.3 ? "end" : ux > 0.3 ? "start" : "middle"];
   };
-  const text = ([x, y], t, style) =>
-    `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" ${style}>${t}</text>`;
-  const mid = (p, q) => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
-  const labels = [
-    text(away(P[0], 14), "A", 'font-weight="bold"'),
-    text(away(P[1], 14), "B", 'font-weight="bold"'),
-    text(away(P[2], 14), "C", 'font-weight="bold"'),
-    text(away(mid(P[1], P[2]), 12), "a", 'font-style="italic"'),
-    text(away(mid(P[0], P[2]), 12), "b", 'font-style="italic"'),
-    text(away(mid(P[0], P[1]), 12), "c", 'font-style="italic"'),
-  ];
-  return `<svg viewBox="0 0 ${w * scale + 2 * pad} ${h * scale + 2 * pad}" role="img" aria-label="Triangle diagram">
-    <polygon points="${P.map((p) => p.join(",")).join(" ")}" fill="#eef7ee" stroke="currentColor" stroke-width="2"/>
-    ${labels.join("")}</svg>`;
+  const color = (k) => (k === focus ? "#d60" : known[k] ? "#286" : "#888");
+  const weight = (k) => (k === focus ? 5 : known[k] ? 3.5 : 1.5);
+  const all = [...t.s, ...t.g];
+  const label = (k) => names[k] + (values ? ` = ${+all[k].toFixed(2)}${k > 2 ? "°" : ""}` : "");
+  const text = ([x, y, anchor], k, style) =>
+    `<text x="${x}" y="${y}" fill="${color(k)}" font-size="15" text-anchor="${anchor}" dominant-baseline="middle" ${style}>${label(k)}</text>`;
+
+  let svg = `<polygon points="${P.map((p) => p.join(",")).join(" ")}" fill="#2861" stroke="none"/>`;
+  for (let k = 0; k < 3; k++) {
+    // Side k runs between the two vertices other than k.
+    const p = P[(k + 1) % 3], q = P[(k + 2) % 3];
+    svg += `<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="${color(k)}" stroke-width="${weight(k)}" stroke-linecap="round"/>`;
+    // Label it off the middle of the edge, perpendicular and away from the triangle.
+    const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
+    let [nx, ny] = unit([q[1] - p[1], p[0] - q[0]]);
+    if (nx * (mx - cx) + ny * (my - cy) < 0) [nx, ny] = [-nx, -ny];
+    svg += text([mx + nx * 10, my + ny * 10, nx < -0.3 ? "end" : nx > 0.3 ? "start" : "middle"], k, 'font-style="italic"');
+
+    // Angle k: an arc (or a square for 90°) at vertex k.
+    const V = P[k];
+    const u = unit([p[0] - V[0], p[1] - V[1]]), v = unit([q[0] - V[0], q[1] - V[1]]);
+    const r = Math.min(24, 0.3 * Math.min(Math.hypot(p[0] - V[0], p[1] - V[1]), Math.hypot(q[0] - V[0], q[1] - V[1])));
+    const s = () => `stroke="${color(k + 3)}" stroke-width="${weight(k + 3) * 0.7}" fill="none"`;
+    if (Math.abs(t.g[k] - 90) < 1e-6) {
+      const m = r * 0.6;
+      svg += `<path d="M${V[0] + u[0] * m},${V[1] + u[1] * m} l${v[0] * m},${v[1] * m} l${-u[0] * m},${-u[1] * m}" ${s()}/>`;
+    } else {
+      const sweep = u[0] * v[1] - u[1] * v[0] > 0 ? 1 : 0;
+      svg += `<path d="M${V[0] + u[0] * r},${V[1] + u[1] * r} A${r},${r} 0 0 ${sweep} ${V[0] + v[0] * r},${V[1] + v[1] * r}" ${s()}/>`;
+    }
+    svg += text(away(V, 12), k + 3, 'font-weight="bold"');
+  }
+  return `<svg viewBox="0 0 ${w * scale + 2 * padX} ${h * scale + 2 * padY}" role="img" aria-label="Triangle diagram">${svg}</svg>`;
 }
 
 const form = document.getElementById("zangles-form");
 const out = document.getElementById("zangles-out");
-const err = document.getElementById("zangles-error");
-const names = ["a", "b", "c", "A", "B", "C"];
+const msg = document.getElementById("zangles-msg");
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  err.textContent = "";
-  out.innerHTML = "";
+function update() {
   const inputs = names.map((n) => form.elements[n]);
-  inputs.forEach((el) => el.classList.contains("computed") && ((el.value = ""), el.classList.remove("computed")));
   const v = inputs.map((el) => (el.value === "" ? NaN : Number(el.value)));
-  let solutions;
-  try {
-    solutions = solve(v.slice(0, 3), v.slice(3));
-  } catch (ex) {
-    err.textContent = ex.message;
+  const known = v.map((x) => !Number.isNaN(x));
+  const focus = inputs.indexOf(document.activeElement);
+  const count = known.filter(Boolean).length;
+  inputs.forEach((el) => (el.placeholder = ""));
+  msg.className = "";
+  msg.textContent = "";
+
+  let solutions = null;
+  if (count < 3) {
+    msg.textContent = `Enter ${3 - count} more value${count === 2 ? "" : "s"}, including at least one side.`;
+  } else {
+    try {
+      solutions = solve(v.slice(0, 3), v.slice(3));
+    } catch (ex) {
+      msg.className = "error";
+      msg.textContent = ex.message;
+    }
+  }
+  if (!solutions) {
+    out.innerHTML = draw(SAMPLE, known, focus, false);
     return;
   }
-  // Fill the form with the first solution.
+
+  // Show the calculated values greyed out in the empty boxes.
   const first = [...solutions[0].s, ...solutions[0].g];
-  inputs.forEach((el, n) => {
-    if (Number.isNaN(v[n])) {
-      el.value = fmt(first[n]);
-      el.classList.add("computed");
-    }
-  });
-  if (solutions.length > 1) {
-    out.insertAdjacentHTML("beforeend", "<p>Two triangles fit these measurements:</p>");
-  }
-  solutions.forEach((t, n) => {
+  inputs.forEach((el, k) => { if (!known[k]) el.placeholder = fmt(first[k]); });
+  if (solutions.length > 1) msg.textContent = "Two triangles fit these measurements:";
+  out.innerHTML = solutions.map((t, n) => {
     const area = 0.5 * t.s[1] * t.s[2] * Math.sin(t.g[0] * RAD);
-    const list = names.map((name, k) => `${name} = ${fmt([...t.s, ...t.g][k])}${k > 2 ? "°" : ""}`).join(", ");
-    out.insertAdjacentHTML(
-      "beforeend",
-      `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>${list}<br>Area = ${fmt(area)}</p>${draw(t)}`
-    );
-  });
-});
+    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true)}`;
+  }).join("");
+}
 
-// Once edited, a computed value becomes an input.
-form.addEventListener("input", (e) => e.target.classList.remove("computed"));
-
-form.addEventListener("reset", () => {
-  err.textContent = "";
-  out.innerHTML = "";
-  names.forEach((n) => form.elements[n].classList.remove("computed"));
-});
+form.addEventListener("input", update);
+form.addEventListener("focusin", update);
+form.addEventListener("focusout", () => setTimeout(update));
+form.addEventListener("submit", (e) => e.preventDefault());
+form.addEventListener("reset", () => setTimeout(update));
+update();
 </script>
