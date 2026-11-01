@@ -108,12 +108,15 @@ const fmt = (x) => +x.toFixed(4);
 const names = ["a", "b", "c", "A", "B", "C"];
 // Shown until there's enough to solve, so you can match it to your problem.
 const SAMPLE = fromSides([6, 7, 8]);
-// Which side is drawn along the bottom of each triangle; Rotate cycles it.
-const bases = [2, 2];
+// How many times each triangle has been rotated away from its longest side
+// being at the bottom.
+const turns = [0, 0];
 
 // Draw triangle t. known[k] and focus pick out names[k]; values adds numbers to labels.
-function draw(t, known, focus, values, base) {
+function draw(t, known, focus, values, turn) {
   // Lay side `base` along the x axis and put the opposite vertex above; flip y for SVG.
+  // Starting from the longest side keeps the triangle as flat as it can be.
+  const base = (t.s.indexOf(Math.max(...t.s)) + turn) % 3;
   const left = (base + 1) % 3, right = (base + 2) % 3;
   const pts = [];
   pts[left] = [0, 0];
@@ -125,11 +128,8 @@ function draw(t, known, focus, values, base) {
   const P = pts.map(([x, y]) => [padX + (x - minX) * scale, padY + (h - y) * scale]);
   const cx = (P[0][0] + P[1][0] + P[2][0]) / 3, cy = (P[0][1] + P[1][1] + P[2][1]) / 3;
   const unit = ([x, y]) => { const l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
-  // Push a point away from the centroid, anchoring text so it grows outward.
-  const away = ([x, y], d) => {
-    const [ux, uy] = unit([x - cx, y - cy]);
-    return [x + ux * d, y + uy * d, ux < -0.3 ? "end" : ux > 0.3 ? "start" : "middle"];
-  };
+  // Anchor text so it grows away from the triangle.
+  const anchor = (dx) => (dx < -0.3 ? "end" : dx > 0.3 ? "start" : "middle");
   const color = (k) => (k === focus ? "#d60" : known[k] ? "#286" : "#888");
   const weight = (k) => (k === focus ? 5 : known[k] ? 3.5 : 1.5);
   const all = [...t.s, ...t.g];
@@ -146,7 +146,7 @@ function draw(t, known, focus, values, base) {
     const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
     let [nx, ny] = unit([q[1] - p[1], p[0] - q[0]]);
     if (nx * (mx - cx) + ny * (my - cy) < 0) [nx, ny] = [-nx, -ny];
-    svg += text([mx + nx * 10, my + ny * 10, nx < -0.3 ? "end" : nx > 0.3 ? "start" : "middle"], k, 'font-style="italic"');
+    svg += text([mx + nx * 10, my + ny * 10, anchor(nx)], k, 'font-style="italic"');
 
     // Angle k: an arc (or a square for 90°) at vertex k.
     const V = P[k];
@@ -160,7 +160,9 @@ function draw(t, known, focus, values, base) {
       const sweep = u[0] * v[1] - u[1] * v[0] > 0 ? 1 : 0;
       svg += `<path d="M${V[0] + u[0] * r},${V[1] + u[1] * r} A${r},${r} 0 0 ${sweep} ${V[0] + v[0] * r},${V[1] + v[1] * r}" ${s()}/>`;
     }
-    svg += text(away(V, 12), k + 3, 'font-weight="bold"');
+    // Label the vertex opposite the middle of its angle, just outside the triangle.
+    const [bx, by] = unit([-u[0] - v[0], -u[1] - v[1]]);
+    svg += text([V[0] + bx * 14, V[1] + by * 14, anchor(bx)], k + 3, 'font-weight="bold"');
   }
   return `<svg viewBox="0 0 ${w * scale + 2 * padX} ${h * scale + 2 * padY}" role="img" aria-label="Triangle diagram">${svg}</svg>`;
 }
@@ -169,7 +171,10 @@ const form = document.getElementById("zangles-form");
 const out = document.getElementById("zangles-out");
 const msg = document.getElementById("zangles-msg");
 
-const rotate = (n) => `<p><button type="button" data-rotate="${n}">Rotate</button></p>`;
+const rotate = (n) => `<p><button type="button" data-rotate="${n}" style="display: inline-flex; align-items: center; gap: 0.3em">
+  <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>
+  </svg>Rotate</button></p>`;
 
 function update() {
   const inputs = names.map((n) => form.elements[n]);
@@ -193,7 +198,7 @@ function update() {
     }
   }
   if (!solutions) {
-    out.innerHTML = draw(SAMPLE, known, focus, false, bases[0]) + rotate(0);
+    out.innerHTML = draw(SAMPLE, known, focus, false, turns[0]) + rotate(0);
     return;
   }
 
@@ -203,7 +208,7 @@ function update() {
   if (solutions.length > 1) msg.textContent = "Two triangles fit these measurements:";
   out.innerHTML = solutions.map((t, n) => {
     const area = 0.5 * t.s[1] * t.s[2] * Math.sin(t.g[0] * RAD);
-    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true, bases[n])}${rotate(n)}`;
+    return `${solutions.length > 1 ? `<h3>Triangle ${n + 1}</h3>` : ""}<p>Area = ${fmt(area)}</p>${draw(t, known, focus, true, turns[n])}${rotate(n)}`;
   }).join("");
 }
 
@@ -213,9 +218,9 @@ form.addEventListener("focusout", () => setTimeout(update));
 form.addEventListener("submit", (e) => e.preventDefault());
 form.addEventListener("reset", () => setTimeout(update));
 out.addEventListener("click", (e) => {
-  const n = e.target.dataset.rotate;
+  const n = e.target.closest("[data-rotate]")?.dataset.rotate;
   if (n === undefined) return;
-  bases[n] = (bases[n] + 1) % 3;
+  turns[n] = (turns[n] + 1) % 3;
   update();
 });
 update();
