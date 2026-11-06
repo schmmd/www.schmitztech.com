@@ -15,16 +15,15 @@ title: zangles
   #zangles-form button, #zangles-out p button { font: inherit; font-size: 1rem; padding: 0.4rem 0.9rem; min-height: 2.75rem; }
   .zangles-units label { display: inline-block; padding: 0.4rem 0.3rem; }
   .zangles-units input { width: 1.1em; height: 1.1em; vertical-align: -0.15em; }
-  /* Phone number pads have no slash or space key, so offer fractions to tap. */
-  .zangles-chips { display: none; flex-wrap: wrap; gap: 0.4rem; align-items: center; max-width: 30rem; }
-  @media (pointer: coarse) { .zangles-chips { display: flex; } }
-  #zangles-form .zangles-chips button { min-width: 2.75rem; padding: 0.4rem 0.5rem; touch-action: manipulation; }
+  /* Phone number pads have no slash or space key, so offer the full keyboard. */
+  .zangles-keyboard { display: none; }
+  @media (pointer: coarse) { .zangles-keyboard { display: block; } }
   .zangles-ratios .short { display: none; }
   @media (max-width: 480px) {
     .zangles-ratios .long { display: none; }
     .zangles-ratios .short { display: inline; }
   }
-  .zangles-trig p button[aria-pressed="true"] { background: #eef3fb; border-color: #1f6fd1; font-weight: bold; }
+  #zangles-keyboard[aria-pressed="true"], .zangles-trig p button[aria-pressed="true"] { background: #eef3fb; border-color: #1f6fd1; font-weight: bold; }
   .zangles-ratios { border-collapse: collapse; width: 100%; max-width: 30rem; }
   .zangles-ratios th, .zangles-ratios td { padding: 0.3rem 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
   .zangles-ratios td { white-space: nowrap; }
@@ -56,16 +55,8 @@ title: zangles
     <label>Angle B <input name="B" type="number" step="any" min="0"></label>
     <label>Angle C <input name="C" type="number" step="any" min="0"></label>
   </div>
-  <p class="zangles-chips" id="zangles-chips" aria-label="Fractions to add to a side">
-    <button type="button" data-insert="⅛">⅛</button>
-    <button type="button" data-insert="¼">¼</button>
-    <button type="button" data-insert="⅜">⅜</button>
-    <button type="button" data-insert="½">½</button>
-    <button type="button" data-insert="⅝">⅝</button>
-    <button type="button" data-insert="¾">¾</button>
-    <button type="button" data-insert="⅞">⅞</button>
-    <button type="button" data-insert="/">/</button>
-    <button type="button" data-insert=" " aria-label="space">space</button>
+  <p class="zangles-keyboard">
+    <button type="button" id="zangles-keyboard" aria-pressed="false">Keyboard: 123</button>
   </p>
   <p>
     <button type="reset">Clear</button>
@@ -402,19 +393,19 @@ form.addEventListener("focusin", update);
 form.addEventListener("focusout", () => setTimeout(update));
 form.addEventListener("submit", (e) => e.preventDefault());
 
-// The fraction chips type into the side that was last being edited, so the
-// number pad can stay up on a phone.
-const chips = document.getElementById("zangles-chips");
-let side = form.elements.a;
-form.addEventListener("focusin", (e) => { if (["a", "b", "c"].includes(e.target.name)) side = e.target; });
-// Don't take focus from the input, which would dismiss its keyboard.
-chips.addEventListener("pointerdown", (e) => e.target.closest("button") && e.preventDefault());
-chips.addEventListener("click", (e) => {
-  const button = e.target.closest("button");
-  if (!button) return;
-  side.focus();
-  side.setRangeText(button.dataset.insert, side.selectionStart, side.selectionEnd, "end");
-  update();
+// Sides open the number pad by default; this switches them to the full
+// keyboard, which has the slash and space that fractions need.
+const keyboard = document.getElementById("zangles-keyboard");
+// Don't take focus from the side being edited, so it's the one whose keyboard swaps.
+keyboard.addEventListener("pointerdown", (e) => e.preventDefault());
+keyboard.addEventListener("click", () => {
+  const full = keyboard.getAttribute("aria-pressed") !== "true";
+  keyboard.setAttribute("aria-pressed", full);
+  keyboard.textContent = full ? "Keyboard: ABC" : "Keyboard: 123";
+  for (const n of ["a", "b", "c"]) form.elements[n].inputMode = full ? "text" : "decimal";
+  // A focused side keeps its old keyboard until it's refocused.
+  const active = document.activeElement;
+  if (["a", "b", "c"].includes(active?.name)) { active.blur(); active.focus(); }
 });
 form.addEventListener("reset", () => setTimeout(update));
 out.addEventListener("click", (e) => {
