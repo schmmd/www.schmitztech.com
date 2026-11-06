@@ -114,13 +114,20 @@ function solve(s, g) {
   // SSA: the angle is opposite one known side; zero, one, or two triangles.
   const i = s.findIndex((x, n) => known(x) && n !== j);
   let sin = (s[i] * Math.sin(g[j] * RAD)) / s[j];
-  if (sin > 1 + 1e-12) throw new Error("No triangle has these measurements.");
+  // With an angle of 90° or more, the side opposite it has to be the longest.
+  const none = new Error(g[j] >= 90
+    ? "No triangle has these measurements: the side opposite an angle of 90° (π/2 radians) or more must be the longest side."
+    : "No triangle has these measurements.");
+  if (sin > 1 + 1e-12) throw none;
   // asin is so steep near 1 that rounding error would split one right
   // triangle into two nearly identical ones.
   if (sin > 1 - 1e-12) sin = 1;
   const first = Math.asin(sin) / RAD;
-  return [first, 180 - first]
-    .filter((x, n) => g[j] + x < 180 - 1e-9 && !(n === 1 && Math.abs(x - first) < 1e-9))
+  const found = [first, 180 - first].filter((x, n) => g[j] + x < 180 - 1e-9 && !(n === 1 && Math.abs(x - first) < 1e-9));
+  // Both get filtered out exactly when the angle is 90° or more and its
+  // opposite side isn't the longest.
+  if (!found.length) throw none;
+  return found
     .map((x) => {
       const angles = g.slice();
       angles[i] = x;
