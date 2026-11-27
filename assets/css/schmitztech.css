@@ -102,6 +102,16 @@ header img {
     max-height: 40vh;
 }
 
+/* The logo on inner pages is a background, not an <img>: link previews pick up
+   the first image on a page, and this one's speech bubble is unreadable small. */
+header .logo {
+    flex: 0 1 229px;
+    aspect-ratio: 229 / 194;
+    box-sizing: border-box;
+    padding: 10px;
+    background: url(../img/ribbit-schmitztech-small.png) center / contain no-repeat content-box;
+}
+
 header h1 {
     display: flex;
     align-items: center;

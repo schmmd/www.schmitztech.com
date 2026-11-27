@@ -3,7 +3,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% if page.url == "/" or page.title == nil %}{{ site.title }}{% else %}{{ page.title }}{% endif %}</title>
-    <meta property="og:image" content="{{ '/android-chrome-512x512.png' | absolute_url }}">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Noto+Serif:400,700&display=swap">
     <link rel="stylesheet" type="text/css" href="{{ baseurl }}/assets/css/schmitztech.css">
 
@@ -22,7 +21,7 @@
         <img src="{{ baseurl }}/assets/img/ribbit-schmitztech.png" alt="Schmitztech" />
         {% else %}
         <h1>
-          <a href="{{ baseurl }}/"><img src="{{ baseurl }}/assets/img/ribbit-schmitztech-small.png" alt="Schmitztech" /></a>
+          <a class="logo" href="{{ baseurl }}/" aria-label="Schmitztech home"></a>
           <span>{{ page.title }}</span>
         </h1>
         {% endif %}
