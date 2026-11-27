@@ -54,7 +54,6 @@ body { color: var(--ink); }
 #card th { color: var(--coast); }
 #card td.bar { width: 100%; }
 #card td.wrap { white-space: normal; }
-#card .scroll { overflow-x: auto; }
 #card td.bar i { display: block; height: 10px; border-radius: 2px; min-width: 1px; }
 #card tr.total td { border-top: 1px solid var(--coast); font-weight: 700; }
 #card .big { font-family: var(--mono); font-size: 22px; font-weight: 700; }
@@ -230,18 +229,16 @@ async function loadState(network) {
 // A day is finished once it has ended in Hawaii, the last US zone to get there
 // (Guam is ahead of everyone). Finished days don't change, so they are cached.
 const lastZoneToday = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Honolulu' });
-const cacheKey = (network, day) => `rain2:${day}:${network}`;
+const cacheKey = (network, day) => `rain3:${day}:${network}`;
 // The daily fields the card shows, in the order they are stored. Rows are cached
-// as bare arrays in this order: the whole country is ~1 MB that way, where
-// IEM's own row objects would overrun localStorage's ~5 MB.
-const DAY_FIELDS = ['precip', 'max_tmpf', 'min_tmpf', 'max_gust', 'max_drct', 'max_gust_localts',
-  'avg_sknt', 'vector_avg_drct', 'min_rh', 'max_rh', 'min_dwpf', 'max_dwpf',
-  'min_feel', 'avg_feel', 'max_feel', 'snow', 'snowd', 'precip_est', 'tmpf_est'];
+// as bare arrays in this order, which keeps the whole country well under
+// localStorage's ~5 MB. Changing this list means bumping the key prefix above.
+const DAY_FIELDS = ['precip', 'max_tmpf', 'min_tmpf', 'precip_est', 'tmpf_est'];
 // Storage can be full, blocked or absent (private windows); the page works without it.
 const stored = (fn) => { try { return fn(); } catch { return null; } };
-// Drop days that have scrolled out of the window, and the older cache format.
+// Drop days that have scrolled out of the window, and older cache formats.
 stored(() => Object.keys(localStorage)
-  .filter((k) => k.startsWith('rain:') || (k.startsWith('rain2:') && !DATES.includes(k.split(':')[1])))
+  .filter((k) => /^rain\d*:/.test(k) && !(k.startsWith('rain3:') && DATES.includes(k.split(':')[1])))
   .forEach((k) => localStorage.removeItem(k)));
 
 async function loadDay(network, i) {
@@ -308,26 +305,6 @@ function renderCard() {
        </table>`
     : '<div class="loading">Loading rain totals…</div>';
 
-  // One row per measurement, one column per day. Rows no day reports are left out.
-  const range = (lo, hi) => (has(lo) && has(hi) ? `${Math.round(lo)}–${Math.round(hi)}` : null);
-  const daily = [
-    ['Peak gust mph', (d) => has(d.max_gust) && `${mph(d.max_gust)}${has(d.max_drct) ? ' ' + compass(d.max_drct) : ''}`],
-    ['Gust time', (d) => has(d.max_gust) && d.max_gust_localts && d.max_gust_localts.slice(11, 16)],
-    ['Avg wind mph', (d) => has(d.avg_sknt) && `${mph(d.avg_sknt)}${has(d.vector_avg_drct) ? ' ' + compass(d.vector_avg_drct) : ''}`],
-    ['Humidity %', (d) => range(d.min_rh, d.max_rh)],
-    ['Dew point °F', (d) => range(d.min_dwpf, d.max_dwpf)],
-    ['Feels like °F', (d) => range(d.min_feel, d.max_feel)],
-    ['Feels avg °F', (d) => has(d.avg_feel) && Math.round(d.avg_feel)],
-    ['Snowfall', (d) => has(d.snow) && fmtIn(d.snow)],
-    ['Snow depth', (d) => has(d.snowd) && fmtIn(d.snowd)],
-  ].map(([k, f]) => [k, s.days.map((d) => f(d) || '—')]).filter(([, cells]) => cells.some((v) => v !== '—'));
-  const dailyTable = daily.length
-    ? `<h3>Each day</h3><div class="scroll"><table>
-         <tr><th></th>${s.days.map((d) => `<th>${dayName(d.day).split(',')[0]}</th>`).join('')}</tr>
-         ${daily.map(([k, cells]) => `<tr><th>${k}</th>${cells.map((v) => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}
-       </table></div>`
-    : '';
-
   const at = (ts) => (ts ? ` at ${ts.slice(11, 16)}` : '');
   const list = (keys, fmt) => keys.filter((k) => has(c[k])).map((k) => fmt(c[k])).join(', ');
   // Only the rows this station actually reports. The soil and road rows exist
@@ -363,7 +340,7 @@ function renderCard() {
   ].filter(([, v]) => v);
 
   $('body').innerHTML =
-    `<h3>Rain since ${dayName(DATES[0])}</h3>${rain}` + dailyTable +
+    `<h3>Rain since ${dayName(DATES[0])}</h3>${rain}` +
     `<h3>Now</h3><table>${rows.map(([k, v]) => `<tr><th>${k}</th><td class="wrap">${esc(v)}</td></tr>`).join('')}</table>` +
     (c.raw ? `<h3>Raw report</h3><pre>${esc(c.raw)}</pre>` : '');
 }
