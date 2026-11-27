@@ -53,6 +53,7 @@ body { color: var(--ink); }
 #card td, #card th { padding: 2px 8px 2px 0; text-align: left; font-weight: normal; white-space: nowrap; }
 #card th { color: var(--coast); }
 #card td.bar { width: 100%; }
+#card td.wrap { white-space: normal; }
 #card td.bar i { display: block; height: 10px; border-radius: 2px; min-width: 1px; }
 #card tr.total td { border-top: 1px solid var(--coast); font-weight: 700; }
 #card .big { font-family: var(--mono); font-size: 22px; font-weight: 700; }
@@ -213,7 +214,7 @@ async function loadState(network) {
   if (!res.ok) throw new Error(`${network}: HTTP ${res.status}`);
   for (const cur of (await res.json()).data) {
     // Today's total from the live feed, until (and unless) the daily summary has one.
-    const days = DATES.map((day) => ({ day, precip: cur.local_date === day && cur.pday <= MAX_DAY ? num(cur.pday) : null, hi: null, lo: null }));
+    const days = DATES.map((day) => ({ day, precip: cur.local_date === day && cur.pday <= MAX_DAY ? num(cur.pday) : null }));
     const s = { cur, days, total: null, loaded: 0 };
     // bubblingMouseEvents off, or the map's own click handler closes the card.
     s.marker = L.circleMarker([cur.lat, cur.lon], { ...style(s), bubblingMouseEvents: false })
@@ -228,12 +229,16 @@ async function loadState(network) {
 // A day is finished once it has ended in Hawaii, the last US zone to get there
 // (Guam is ahead of everyone). Finished days don't change, so they are cached.
 const lastZoneToday = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Honolulu' });
-const cacheKey = (network, day) => `rain:${day}:${network}`;
+const cacheKey = (network, day) => `rain3:${day}:${network}`;
+// The daily fields the card shows, in the order they are stored. Rows are cached
+// as bare arrays in this order, which keeps the whole country well under
+// localStorage's ~5 MB. Changing this list means bumping the key prefix above.
+const DAY_FIELDS = ['precip', 'max_tmpf', 'min_tmpf', 'precip_est', 'tmpf_est'];
 // Storage can be full, blocked or absent (private windows); the page works without it.
 const stored = (fn) => { try { return fn(); } catch { return null; } };
-// Drop days that have scrolled out of the window.
+// Drop days that have scrolled out of the window, and older cache formats.
 stored(() => Object.keys(localStorage)
-  .filter((k) => k.startsWith('rain:') && !DATES.includes(k.split(':')[1]))
+  .filter((k) => /^rain\d*:/.test(k) && !(k.startsWith('rain3:') && DATES.includes(k.split(':')[1])))
   .forEach((k) => localStorage.removeItem(k)));
 
 async function loadDay(network, i) {
@@ -242,16 +247,16 @@ async function loadDay(network, i) {
   if (!rows) {
     const res = await fetch(`${IEM}/api/1/daily.json?network=${network}&date=${day}`);
     if (!res.ok) throw new Error(`${network} ${day}: HTTP ${res.status}`);
-    rows = (await res.json()).data.map((r) => [r.station, num(r.precip), num(r.max_tmpf), num(r.min_tmpf)]);
+    rows = (await res.json()).data.map((r) => [r.station, ...DAY_FIELDS.map((f) => r[f] ?? null)]);
     if (day < lastZoneToday && rows.length) stored(() => localStorage.setItem(key, JSON.stringify(rows)));
   }
-  for (const [id, p, hi, lo] of rows) {
+  for (const [id, ...values] of rows) {
     const s = stations.get(`${network}|${id}`);
     if (!s) continue;
     const d = s.days[i];
-    if (p > MAX_DAY) d.bad = p; else d.precip = p ?? d.precip;
-    d.hi = hi;
-    d.lo = lo;
+    const { precip, ...rest } = Object.fromEntries(DAY_FIELDS.map((f, j) => [f, values[j]]));
+    Object.assign(d, rest);
+    if (precip > MAX_DAY) d.bad = precip; else d.precip = precip ?? d.precip;
     s.loaded++;
     s.total = totalOf(s.days);
     s.marker.setStyle(style(s)).setRadius(style(s).radius);
@@ -264,6 +269,8 @@ async function loadDay(network, i) {
 const fmtIn = (v) => (v === null ? '—' : v === TRACE ? 'trace' : v.toFixed(2) + '"');
 const COMPASS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
 const mph = (kt) => Math.round(kt * 1.15078);
+const compass = (deg) => COMPASS[Math.round(deg / 22.5) % 16];
+const has = (v) => v !== null && v !== undefined;
 const SKY = { CLR: 'clear', SKC: 'clear', FEW: 'few clouds', SCT: 'scattered', BKN: 'broken', OVC: 'overcast', VV: 'obscured' };
 
 function select(s) {
@@ -291,33 +298,50 @@ function renderCard() {
        <table>
          <tr><th></th><th>rain</th><th></th><th>hi/lo °F</th></tr>
          ${s.days.map((d) => `<tr>
-           <td>${dayName(d.day)}</td><td>${d.bad ? `${d.bad}" ignored, faulty gauge` : fmtIn(d.precip)}</td>
+           <td>${dayName(d.day)}</td><td>${d.bad ? `${d.bad}" ignored, faulty gauge` : fmtIn(d.precip) + (d.precip_est ? ' est.' : '')}</td>
            <td class="bar"><i style="width:${(inches(d.precip ?? 0) / max) * 100}%;background:${BUCKETS[bucketOf(inches(d.precip ?? 0))][1]};outline:1px solid var(--coast)"></i></td>
-           <td>${d.hi === null || d.lo === null ? '—' : Math.round(d.hi) + '/' + Math.round(d.lo)}</td></tr>`).join('')}
+           <td>${has(d.max_tmpf) && has(d.min_tmpf) ? Math.round(d.max_tmpf) + '/' + Math.round(d.min_tmpf) + (d.tmpf_est ? ' est.' : '') : '—'}</td></tr>`).join('')}
          <tr class="total"><td>Total</td><td>${fmtIn(s.total)}</td><td></td><td></td></tr>
        </table>`
     : '<div class="loading">Loading rain totals…</div>';
 
-  // Only the rows this station actually reports.
+  const at = (ts) => (ts ? ` at ${ts.slice(11, 16)}` : '');
+  const list = (keys, fmt) => keys.filter((k) => has(c[k])).map((k) => fmt(c[k])).join(', ');
+  // Only the rows this station actually reports. The soil and road rows exist
+  // because IEM sends those fields; airport stations leave them empty.
   const rows = [
-    ['Rain, last hour', c.phour !== null && fmtIn(c.phour)],
+    ['Rain, last hour', has(c.phour) && fmtIn(c.phour)],
+    ['Rain today, as reported', has(c.ob_pday) && fmtIn(c.ob_pday)],
+    ['Rain this month, as reported', has(c.ob_pmonth) && fmtIn(c.ob_pmonth)],
+    ['Rain this month, summed', has(c.s_pmonth) && fmtIn(c.s_pmonth)],
     ['Weather', c.wxcodes && [].concat(c.wxcodes).join(' ')],
-    ['Temperature', c.tmpf !== null && `${Math.round(c.tmpf)} °F` + (c.feel !== null && Math.abs(c.feel - c.tmpf) >= 2 ? `, feels ${Math.round(c.feel)}` : '')],
-    ['Today hi/lo', c.max_tmpf !== null && c.min_tmpf !== null && `${Math.round(c.max_tmpf)} / ${Math.round(c.min_tmpf)} °F`],
-    ['Dew point', c.dwpf !== null && `${Math.round(c.dwpf)} °F`],
-    ['Humidity', c.relh !== null && `${Math.round(c.relh)}%`],
-    ['Wind', c.sknt !== null && (c.sknt === 0 ? 'calm' : `${c.drct !== null ? COMPASS[Math.round(c.drct / 22.5) % 16] + ' ' : ''}${mph(c.sknt)} mph`) + (c.gust ? `, gusting ${mph(c.gust)}` : '')],
-    ['Peak gust today', c.max_gust !== null && `${mph(c.max_gust)} mph`],
-    ['Sky', [1, 2, 3, 4].filter((i) => c['skyc' + i]).map((i) => (SKY[c['skyc' + i]] ?? c['skyc' + i]) + (c['skyl' + i] ? ` ${c['skyl' + i].toLocaleString()} ft` : '')).join(', ')],
-    ['Visibility', c.vsby !== null && `${c.vsby} mi`],
-    ['Pressure', c.alti !== null ? `${c.alti.toFixed(2)} inHg` : c.mslp !== null && `${c.mslp} mb`],
-    ['Snow today', c.snow !== null && `${c.snow}"`],
-    ['Snow depth', c.snowd !== null && `${c.snowd}"`],
+    ['Temperature', has(c.tmpf) && `${Math.round(c.tmpf)} °F` + (has(c.feel) && Math.abs(c.feel - c.tmpf) >= 2 ? `, feels ${Math.round(c.feel)}` : '')],
+    ['Today hi/lo', has(c.max_tmpf) && has(c.min_tmpf) && `${Math.round(c.max_tmpf)} / ${Math.round(c.min_tmpf)} °F`],
+    ['Dew point', has(c.dwpf) && `${Math.round(c.dwpf)} °F`],
+    ['Humidity', has(c.relh) && `${Math.round(c.relh)}%`],
+    ['Wind', has(c.sknt) && (c.sknt === 0 ? 'calm' : `${has(c.drct) ? compass(c.drct) + ' ' : ''}${mph(c.sknt)} mph`) + (c.gust ? `, gusting ${mph(c.gust)}` : '')],
+    ['Peak wind today', has(c.max_sknt) && `${mph(c.max_sknt)} mph${at(c.local_max_sknt_ts)}`],
+    ['Peak gust today', has(c.max_gust) && `${mph(c.max_gust)} mph${at(c.local_max_gust_ts)}`],
+    ['Sky', [1, 2, 3, 4].filter((i) => c['skyc' + i]).map((i) => (SKY[c['skyc' + i].trim()] ?? c['skyc' + i]) + (c['skyl' + i] ? ` ${c['skyl' + i].toLocaleString()} ft` : '')).join(', ')],
+    ['Visibility', has(c.vsby) && `${c.vsby} mi`],
+    ['Altimeter', has(c.alti) && `${c.alti.toFixed(2)} inHg`],
+    ['Sea-level pressure', has(c.mslp) && `${c.mslp} mb`],
+    ['Station pressure', has(c.pres) && `${c.pres}`],
+    ['Ice accretion', [1, 3, 6].filter((n) => has(c[`ice_accretion_${n}hr`])).map((n) => `${fmtIn(c[`ice_accretion_${n}hr`])} in ${n} h`).join(', ')],
+    ['Snow today', has(c.snow) && `${c.snow}"`],
+    ['Snow depth', has(c.snowd) && `${c.snowd}"`],
+    ['Snow water equivalent', has(c.snoww) && `${c.snoww}"`],
+    ['Solar radiation', has(c.srad) && `${c.srad} W/m²`],
+    ['Soil moisture', list(['c1smv', 'c2smv', 'c3smv', 'c4smv', 'c5smv'], (v) => `${v}%`)],
+    ['Soil temperature', list(['c1tmpf', 'c2tmpf', 'c3tmpf', 'c4tmpf', 'c5tmpf'], (v) => `${Math.round(v)} °F`)],
+    ['Pavement temperature', list(['tsf0', 'tsf1', 'tsf2', 'tsf3'], (v) => `${Math.round(v)} °F`)],
+    ['Subsurface temperature', has(c.rwis_subf) && `${Math.round(c.rwis_subf)} °F`],
+    ['Road condition', list(['scond0', 'scond1', 'scond2', 'scond3'], (v) => v)],
   ].filter(([, v]) => v);
 
   $('body').innerHTML =
     `<h3>Rain since ${dayName(DATES[0])}</h3>${rain}` +
-    `<h3>Now</h3><table>${rows.map(([k, v]) => `<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join('')}</table>` +
+    `<h3>Now</h3><table>${rows.map(([k, v]) => `<tr><th>${k}</th><td class="wrap">${esc(v)}</td></tr>`).join('')}</table>` +
     (c.raw ? `<h3>Raw report</h3><pre>${esc(c.raw)}</pre>` : '');
 }
 
