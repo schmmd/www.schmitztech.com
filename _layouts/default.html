@@ -2,10 +2,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {% comment %}A page that sets share_image gets its own title and preview image, so a
-    shared link names the page and doesn't shrink the header logo to a blur.{% endcomment %}
-    <title>{% if page.share_image %}{{ page.title }}{% else %}Schmitztech{% endif %}</title>
-    {% if page.share_image %}<meta property="og:image" content="{{ page.share_image | absolute_url }}">{% endif %}
+    {% comment %}Each page is titled with its own name and declares the plain frog as its
+    preview image, so a shared link names the page and apps don't shrink the header
+    logo's speech bubble to a blur.{% endcomment %}
+    <title>{% if page.url == "/" or page.title == nil %}{{ site.title }}{% else %}{{ page.title }}{% endif %}</title>
+    <meta property="og:image" content="{{ '/android-chrome-512x512.png' | absolute_url }}">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Noto+Serif:400,700&display=swap">
     <link rel="stylesheet" type="text/css" href="{{ baseurl }}/assets/css/schmitztech.css">
 
