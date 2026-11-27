@@ -172,72 +172,86 @@ let selected = null;
 const BOX = {"AK":[51.8,-176.7,71.3,-131.5],"AL":[30.2,-88.3,34.9,-85.1],"AR":[33.2,-94.5,36.5,-89.8],"AZ":[31.4,-114.7,37.0,-109.0],"CA":[32.5,-124.3,41.8,-114.6],"CO":[37.1,-108.8,40.8,-102.2],"CT":[41.1,-73.5,42.0,-72.0],"DE":[38.6,-75.7,39.7,-75.3],"FL":[24.5,-87.4,30.9,-80.0],"GA":[30.7,-85.3,34.9,-81.1],"GU":[13.4,144.7,19.3,166.7],"HI":[19.7,-177.4,28.3,-155.0],"IA":[40.4,-96.4,43.5,-90.3],"ID":[42.2,-117.1,48.8,-111.0],"IL":[37.0,-91.2,42.5,-87.5],"IN":[38.0,-87.6,41.8,-84.8],"KS":[37.0,-101.9,40.0,-94.7],"KY":[36.6,-88.8,39.1,-82.5],"LA":[27.1,-93.9,32.8,-87.7],"MA":[41.2,-73.3,42.8,-69.9],"MD":[38.1,-79.4,39.8,-75.1],"ME":[43.3,-71.0,47.3,-67.7],"MI":[41.7,-90.2,47.5,-82.5],"MN":[43.6,-97.0,49.4,-90.3],"MO":[36.2,-95.0,40.4,-89.5],"MS":[30.3,-91.3,35.0,-88.1],"MT":[44.6,-115.0,48.9,-104.1],"NC":[33.9,-83.5,36.5,-75.6],"ND":[46.0,-104.0,49.0,-96.6],"NE":[40.0,-104.0,42.9,-95.5],"NH":[42.7,-72.4,44.6,-70.8],"NJ":[39.0,-75.1,41.3,-74.0],"NM":[31.8,-109.0,36.8,-103.0],"NV":[35.9,-119.9,42.0,-114.8],"NY":[40.6,-79.3,45.0,-71.9],"OH":[38.8,-84.8,41.8,-80.6],"OK":[33.9,-101.6,37.0,-94.6],"OR":[42.0,-124.5,46.2,-117.0],"PA":[39.7,-80.5,42.1,-75.0],"PR":[18.0,-67.2,18.5,-65.6],"RI":[41.1,-71.8,42.0,-71.4],"SC":[32.2,-82.9,35.0,-78.7],"SD":[42.7,-103.8,45.9,-96.5],"TN":[35.0,-90.1,36.7,-82.1],"TX":[25.9,-106.4,36.5,-92.0],"UT":[37.0,-114.1,41.8,-109.3],"VA":[36.5,-83.3,39.2,-75.4],"VI":[17.7,-65.0,18.4,-64.8],"VT":[42.8,-73.3,45.0,-72.0],"WA":[45.6,-124.6,48.8,-117.1],"WI":[42.5,-92.7,46.8,-86.9],"WV":[37.2,-82.6,40.2,-77.9],"WY":[41.0,-111.1,45.0,-104.1]};
 const boundsOf = ([s, w, n, e]) => L.latLngBounds([s, w], [n, e]);
 
-// Every request goes through this queue, 6 at a time, so zooming out to the
-// whole country doesn't fire 265 at once and trip IEM's rate limit.
-const queue = [];
-let running = 0, failed = 0;
-function enqueue(job) {
-  queue.push(job);
-  pump();
-}
-function pump() {
-  while (running < 6 && queue.length) {
-    const job = queue.shift();
-    running++;
-    // One retry: a dropped connection would otherwise silently understate a state's totals.
-    job().catch(job).catch((e) => { failed++; console.error(e); }).finally(() => { running--; pump(); });
-  }
-  const busy = running + queue.length;
-  $('msg').textContent = busy ? 'Loading…'
-    : `${stations.size} stations${failed ? ` · ${failed} requests failed` : ''} · zoom out for more states`;
-  if (!busy) {
-    // Wettest last, so they sit on top where dots overlap.
-    [...stations.values()].filter((s) => s.total !== null)
-      .sort((a, b) => a.total - b.total).forEach((s) => s.marker.bringToFront());
-  }
-}
+// Being a polite guest of IEM: one state at a time, states the user has panned
+// away from are dropped before they are fetched, finished days are kept in
+// localStorage, and nothing is retried: a failure stays failed until a reload.
+const pending = []; // states on screen, waiting their turn
+const done = new Set(); // fetched or failed, either way not asked for again
+let current = null, failed = 0;
 
-const requested = new Set();
 function loadVisible() {
   const view = map.getBounds();
+  pending.length = 0;
   for (const [state, box] of Object.entries(BOX)) {
-    if (requested.has(state) || !view.contains(boundsOf(box))) continue;
-    requested.add(state);
-    enqueue(() => loadState(`${state}_ASOS`));
+    if (!done.has(state) && state !== current && view.contains(boundsOf(box))) pending.push(state);
   }
+  next();
+}
+
+async function next() {
+  if (current) return; // the running loop picks up whatever is pending
+  while ((current = pending.shift() ?? null)) {
+    status();
+    await loadState(`${current}_ASOS`).catch((e) => { failed++; console.error(e); });
+    done.add(current);
+  }
+  status();
+  // Wettest last, so they sit on top where dots overlap.
+  [...stations.values()].filter((s) => s.total !== null)
+    .sort((a, b) => a.total - b.total).forEach((s) => s.marker.bringToFront());
+}
+
+function status() {
+  $('msg').textContent = current
+    ? `Loading ${current}${pending.length ? `, ${pending.length} more` : ''}…`
+    : `${stations.size} stations · zoom out for more states` +
+      (failed ? ` · ${failed} request${failed > 1 ? 's' : ''} failed, reload to retry` : '');
 }
 
 async function loadState(network) {
   const res = await fetch(`${IEM}/api/1/currents.json?network=${network}`);
   if (!res.ok) throw new Error(`${network}: HTTP ${res.status}`);
   for (const cur of (await res.json()).data) {
-    const key = `${network}|${cur.station}`;
-    if (stations.has(key)) continue; // the retry of a half-finished load
     // Today's total from the live feed, until (and unless) the daily summary has one.
     const days = DATES.map((day) => ({ day, precip: cur.local_date === day && cur.pday <= MAX_DAY ? num(cur.pday) : null, hi: null, lo: null }));
     const s = { cur, days, total: null, loaded: 0 };
     // bubblingMouseEvents off, or the map's own click handler closes the card.
     s.marker = L.circleMarker([cur.lat, cur.lon], { ...style(s), bubblingMouseEvents: false })
       .addTo(map).on('click', () => select(s));
-    stations.set(key, s);
+    stations.set(`${network}|${cur.station}`, s);
   }
-  // ponytail: one request per state per day. IEM has no all-states daily
-  // endpoint, and its multi-day CSV one (cgi-bin/request/daily.py) answers 429
-  // past about one request a second.
-  DATES.forEach((_, i) => enqueue(() => loadDay(network, i)));
+  // ponytail: one request per day (fewer once days are cached). IEM has no
+  // multi-day endpoint that isn't rate-limited to about one request a second.
+  await Promise.all(DATES.map((_, i) => loadDay(network, i).catch((e) => { failed++; console.error(e); })));
 }
 
+// A day is finished once it has ended in Hawaii, the last US zone to get there
+// (Guam is ahead of everyone). Finished days don't change, so they are cached.
+const lastZoneToday = new Date().toLocaleDateString('en-CA', { timeZone: 'Pacific/Honolulu' });
+const cacheKey = (network, day) => `rain:${day}:${network}`;
+// Storage can be full, blocked or absent (private windows); the page works without it.
+const stored = (fn) => { try { return fn(); } catch { return null; } };
+// Drop days that have scrolled out of the window.
+stored(() => Object.keys(localStorage)
+  .filter((k) => k.startsWith('rain:') && !DATES.includes(k.split(':')[1]))
+  .forEach((k) => localStorage.removeItem(k)));
+
 async function loadDay(network, i) {
-  const res = await fetch(`${IEM}/api/1/daily.json?network=${network}&date=${DATES[i]}`);
-  if (!res.ok) throw new Error(`${network} ${DATES[i]}: HTTP ${res.status}`);
-  for (const row of (await res.json()).data) {
-    const s = stations.get(`${network}|${row.station}`);
+  const day = DATES[i], key = cacheKey(network, day);
+  let rows = stored(() => JSON.parse(localStorage.getItem(key)));
+  if (!rows) {
+    const res = await fetch(`${IEM}/api/1/daily.json?network=${network}&date=${day}`);
+    if (!res.ok) throw new Error(`${network} ${day}: HTTP ${res.status}`);
+    rows = (await res.json()).data.map((r) => [r.station, num(r.precip), num(r.max_tmpf), num(r.min_tmpf)]);
+    if (day < lastZoneToday && rows.length) stored(() => localStorage.setItem(key, JSON.stringify(rows)));
+  }
+  for (const [id, p, hi, lo] of rows) {
+    const s = stations.get(`${network}|${id}`);
     if (!s) continue;
     const d = s.days[i];
-    const p = num(row.precip);
     if (p > MAX_DAY) d.bad = p; else d.precip = p ?? d.precip;
-    d.hi = num(row.max_tmpf);
-    d.lo = num(row.min_tmpf);
+    d.hi = hi;
+    d.lo = lo;
     s.loaded++;
     s.total = totalOf(s.days);
     s.marker.setStyle(style(s)).setRadius(style(s).radius);
